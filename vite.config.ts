@@ -1,3 +1,4 @@
+import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { fileURLToPath } from "url";
@@ -6,6 +7,11 @@ import { fileURLToPath } from "url";
 export default defineConfig({
   plugins: [react()],
   base: "", // to have the index.html file import ressources as browser needs (without, it says /assets, which does not work)
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
   build: {
     outDir: "extension/dist",
     rollupOptions: {
