@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { CardWithForm } from "../organisms/CardWithForm";
+import { AddTranslationCard } from "../organisms/AddTranslationCard";
 import { CustomCard } from "../organisms/CustomCard";
 
 interface ContentScriptPageProps extends ComponentProps<any> {}
@@ -100,9 +100,9 @@ document.addEventListener("keydown", (event) => {
       removeTable();
       console.log("reset");
       break;
-    case "Enter":
-      console.log("save");
-      break;
+    //case "Enter":
+    //  console.log("save");
+    //  break;
     default:
       console.log("other key is pressed");
   }
@@ -170,7 +170,7 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
         ...style,
       }}
     >
-      <CardWithForm />
+      <AddTranslationCard />
       <div>
         Mouse Coordinates: x: {rectCoords.x}, y: {rectCoords.y}
       </div>
