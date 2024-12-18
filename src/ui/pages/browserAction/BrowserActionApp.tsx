@@ -1,24 +1,21 @@
-import { useState } from 'react'
-import './BrowserActionApp.css'
+import { ComponentProps, FC } from "react";
+import "./BrowserActionApp.css";
 
-export function BrowserActionApp() {
-  const [count, setCount] = useState(0)
+interface Props extends ComponentProps<any> {
+  root: HTMLElement | null;
+}
+
+export const BrowserActionApp: FC<Props> = (props) => {
+  const { root } = props;
+  if (!root) return <div>Root not found</div>;
+
+  const isContent = root.dataset.isContent === "true";
+  const isBrowserAction = root.dataset.isBrowserAction === "true";
 
   return (
     <>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/BrowserActionApp.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {isContent && <h1>Content Script</h1>}
+      {isBrowserAction && <h1>Browser Action</h1>}
     </>
-  )
-}
-
+  );
+};

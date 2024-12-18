@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import ReactDOM from "react-dom";
+import { useEffect } from "react";
+import { createRoot } from "react-dom/client";
 
 const popupStyle: React.CSSProperties = {
   position: "fixed",
@@ -51,13 +51,15 @@ const Popup = ({ text, onClose }: any) => {
 export const showPopup = (text: string | undefined) => {
   const container = document.createElement("div");
   document.body.appendChild(container);
+  const root = createRoot(container); // createRoot(container!) if you use TypeScript
 
   const close = () => {
-    ReactDOM.unmountComponentAtNode(container);
+    root.unmount();
     document.body.removeChild(container);
   };
 
-  ReactDOM.render(<Popup text={text} onClose={close} />, container);
+  root.render(<Popup text={text} onClose={close} />);
+  // root.render(<App tab="home" />);
 };
 
 export const WordExtractorInput = () => {

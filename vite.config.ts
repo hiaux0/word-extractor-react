@@ -20,11 +20,12 @@ export default defineConfig({
       },
       output: {
         entryFileNames: (entryInfo) => {
-          const keepNames = ["contentScript"];
-          if (keepNames.includes(entryInfo.name)) {
-            return "assets/[name].js";
-          }
-          return "assets/[name].[hash].js";
+          //const keepNames = ["contentScript"];
+          //if (keepNames.includes(entryInfo.name)) {
+          //  return "assets/[name].js";
+          //}
+          return "assets/[name].js";
+          // return "assets/[name].[hash].js";
         },
       },
     },
