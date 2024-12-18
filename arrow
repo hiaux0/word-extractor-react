@@ -1,6 +1,4 @@
 extension/manifest.json
 package.json
 vite.config.ts
-extension/browserAction/index.html
 index.html
-extension/dist/index-browser-action.html

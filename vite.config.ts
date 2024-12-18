@@ -14,9 +14,7 @@ export default defineConfig({
           new URL("./src/common/modules/contentScript.ts", import.meta.url),
         ),
         // browserAction: fileURLToPath(new URL("./src/ui/pages/browserAction/index.html", import.meta.url)),
-        browserAction: fileURLToPath(
-          new URL("./index-browser-action.html", import.meta.url),
-        ),
+        app: fileURLToPath(new URL("./index.html", import.meta.url)),
       },
       output: {
         entryFileNames: (entryInfo) => {

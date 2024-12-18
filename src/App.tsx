@@ -1,35 +1,21 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { ComponentProps, FC } from "react";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+interface Props extends ComponentProps<any> {
+  root: HTMLElement | null;
+}
+
+export const App: FC<Props> = (props) => {
+  const { root } = props;
+  if (!root) return <div>Root not found</div>;
+
+  const isContent = root.dataset.isContent === "true";
+  const isBrowserAction = root.dataset.isBrowserAction === "true";
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {isContent && <h1>Content Script</h1>}
+      {isBrowserAction && <h1>Browser Action</h1>}
     </>
-  )
-}
-
-export default App
+  );
+};
