@@ -33,7 +33,7 @@ export class CRUDService<T extends AnyObject> {
   public create(
     item: Partial<T>,
     options: { allowDuplicate?: boolean; uniqueByKey?: keyof T } = {},
-  ): void {
+  ): T | undefined {
     // @ts-ignore instantiated
     const finalItem: T = {
       id: generateId(),
@@ -45,7 +45,7 @@ export class CRUDService<T extends AnyObject> {
     /** */
     if (allowDuplicate) {
       this.items.push(finalItem);
-      return;
+      return finalItem;
     }
 
     /** */
@@ -65,10 +65,11 @@ export class CRUDService<T extends AnyObject> {
     const allowUpdate = existingItemIndex !== -1;
     if (allowUpdate) {
       this.items[existingItemIndex] = finalItem;
-      return;
+      return finalItem;
     }
 
     this.items.push(finalItem);
+    return finalItem;
   }
 
   public insertAt(index: number, items: T[]): T[] {

@@ -16,27 +16,27 @@ import { Combobox } from "./Combobox/Combobox";
 import { CRUDService } from "@/lib/CRUDService";
 import { ISelectItem } from "@/domain/types/types";
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
+const frameworks: ISelectItem[] = [
+  //{
+  //  value: "next.js",
+  //  label: "Next.js",
+  //},
+  //{
+  //  value: "sveltekit",
+  //  label: "SvelteKit",
+  //},
+  //{
+  //  value: "nuxt.js",
+  //  label: "Nuxt.js",
+  //},
+  //{
+  //  value: "remix",
+  //  label: "Remix",
+  //},
+  //{
+  //  value: "astro",
+  //  label: "Astro",
+  //},
 ];
 
 const sheetsCRUD = new CRUDService<ISelectItem>(frameworks);
@@ -51,12 +51,14 @@ export function AddTranslationCard() {
 
   const completeTranslation = useCallback(() => {
     const asht = [inputSheet, translation, comment];
+    /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,54] asht: ", asht);
   }, [inputSheet, translation, comment]);
 
   const addNewItem = useCallback((newItem: string) => {
-    sheetsCRUD.create({ value: newItem, label: newItem });
+    const created = sheetsCRUD.create({ value: newItem, label: newItem });
     const updated = sheetsCRUD.readAll();
     setSheets(updated);
+    if (created) selectInputSheet(created);
   }, []);
 
   return (
@@ -79,6 +81,7 @@ export function AddTranslationCard() {
               <Input
                 id="name"
                 onChange={(event) => addTranslation(event.target.value)}
+                autoFocus
               />
             </div>
             <div className="flex flex-col space-y-1.5">

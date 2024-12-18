@@ -55,24 +55,30 @@ export const Combobox: FC<ComboboxProps> = (props) => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between text-muted-foreground"
+          className="w-[200px] justify-between "
         >
-          {value
-            ? items.find((item) => item.value === value)?.label
-            : (placeholder ?? "Select item...")}
+          {value ? (
+            items.find((item) => item.value === value)?.label
+          ) : items.length === 0 ? (
+            <div className="text-muted-foreground">Add item</div>
+          ) : (
+            placeholder && (
+              <div className="text-muted-foreground">Select item...</div>
+            )
+          )}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandInput
-            placeholder="Search item..."
+            placeholder={items.length ? "Search item..." : "Enter new item..."}
             onValueChange={setSearchValue}
             onKeyDown={(event) => event.key === "Enter" && addNewItem()}
           />
           <CommandList>
             <CommandEmpty>
-              {onAddNewItem ? (
+              {onAddNewItem && searchValue ? (
                 <>
                   <Button size="sm" onClick={addNewItem}>
                     Add new item "{searchValue}"
@@ -82,7 +88,15 @@ export const Combobox: FC<ComboboxProps> = (props) => {
                   </div>
                 </>
               ) : (
-                <>No item found.</>
+                <>
+                  {items.length ? (
+                    <>No item found.</>
+                  ) : (
+                    <div className="text-muted-foreground">
+                      You may add a new item by typing in the input
+                    </div>
+                  )}
+                </>
               )}
             </CommandEmpty>
             <CommandGroup>
