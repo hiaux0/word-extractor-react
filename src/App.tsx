@@ -1,5 +1,6 @@
 import { ComponentProps, FC } from "react";
 import "./App.css";
+import { ContentScriptPage } from "./ui/pages/ContentScriptPage";
 
 interface Props extends ComponentProps<any> {
   root: HTMLElement | null;
@@ -14,7 +15,7 @@ export const App: FC<Props> = (props) => {
 
   return (
     <>
-      {isContent && <h1>Content Script</h1>}
+      {isContent && <ContentScriptPage />}
       {isBrowserAction && <h1>Browser Action</h1>}
     </>
   );
