@@ -12,7 +12,8 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["dist/assets/contentScript.js", "dist/assets/app.js"]
+      "js": ["dist/assets/contentScript.js", "dist/assets/app.js"],
+      "css": ["dist/app.css"]
     }
   ],
   "browser_action": {

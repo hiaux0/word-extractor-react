@@ -1,4 +1,5 @@
 extension/manifest.json
+arrow
 package.json
 vite.config.ts
 index.html

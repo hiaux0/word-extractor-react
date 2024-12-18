@@ -6,6 +6,8 @@ import {
   useRef,
   useState,
 } from "react";
+import { CardWithForm } from "../organisms/CardWithForm";
+import { CustomCard } from "../organisms/CustomCard";
 
 interface ContentScriptPageProps extends ComponentProps<any> {}
 
@@ -128,7 +130,8 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
     };
 
     const handleMouseUp = (event: MouseEvent) => {
-      const { x, y } = mouseDownCoords.current;
+      /*prettier-ignore*/ console.log("[ContentScriptPage.tsx,133] event: ", event);
+      let { x, y } = mouseDownCoords.current;
       const sameX = x === event.clientX;
       const sameY = y === event.clientY;
       if (sameX && sameY) {
@@ -136,9 +139,12 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
         return;
       }
 
+      const ax = Math.max(x, event.clientX);
+      const maxY = Math.max(y, event.clientY);
+      const ay = maxY + adjustY;
       setRectCoords({
-        x: Math.max(x, event.clientX),
-        y: Math.max(y, event.clientY) + adjustY,
+        x: ax,
+        y: ay,
       });
     };
 
@@ -159,15 +165,12 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
         position: "absolute",
         top: rectCoords.y,
         left: rectCoords.x,
-        width: "100px",
-        height: "100px",
-        border: "1px solid red",
         display: hide ? "none" : "block",
         backgroundColor: "white",
         ...style,
       }}
     >
-      ContentScriptPage
+      <CardWithForm />
       <div>
         Mouse Coordinates: x: {rectCoords.x}, y: {rectCoords.y}
       </div>

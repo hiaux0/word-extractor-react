@@ -23,7 +23,10 @@ export default defineConfig({
         app: fileURLToPath(new URL("./index.html", import.meta.url)),
       },
       output: {
-        entryFileNames: (entryInfo) => {
+        assetFileNames: (assetInfo) => {
+          return assetInfo.names[0];
+        },
+        entryFileNames: (_entryInfo) => {
           //const keepNames = ["contentScript"];
           //if (keepNames.includes(entryInfo.name)) {
           //  return "assets/[name].js";
