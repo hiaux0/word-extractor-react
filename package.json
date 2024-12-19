@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build-watch": "vite build --watch --config ./vite.config.ts",
+    "build-watch:app": "vite build --watch --config ./vite.config.ts",
+    "build-watch:background": "vite build --watch --config ./vite.background.config.ts",
+    "build-watch:content": "vite build --watch --config ./vite.content.config.ts",
+    "build-watch": "npm run build-watch:app & npm run build-watch:background & npm run build-watch:content",
     "lint": "eslint .",
     "preview": "vite preview",
     "run": "web-ext run"

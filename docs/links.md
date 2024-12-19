@@ -22,3 +22,10 @@
 
 ## Cross Browser
 - https://github.com/mozilla/webextension-polyfill
+
+# Assorted
+- Share objects with page scripts
+  - Note: Firefox provides cloneInto() and exportFunction() to enable content scripts to access JavaScript objects created by page scripts and expose their JavaScript objects to page scripts.
+  - See Sharing objects with page scripts for more details.
+  - https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Sharing_objects_with_page_scripts
+

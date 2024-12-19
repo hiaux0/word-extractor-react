@@ -1,7 +1,8 @@
 import { Browser } from "@/domain/types/types";
 import { CRUDService } from "../CRUDService";
+import { getData, openDatabase, saveData } from "../CommunicationService";
 
-console.log("Extension background script is active.2");
+// Usage example
 
 export declare var browser: Browser & typeof globalThis;
 
@@ -13,6 +14,23 @@ browser.contextMenus.create({
 browser.browserAction.onClicked.addListener(() => {
   /*prettier-ignore*/ console.log("[background.ts,28] addListener: ", );
   browser.tabs.create({ url: "dist/index.html" });
+
+  openDatabase()
+    .then((db) => {
+      /*prettier-ignore*/ console.log("[CommunicationService.ts,59] db: ", db);
+      //const data = { id: 1, name: "John Doe", preferences: { theme: "dark" } };
+      //return saveData(db, data);
+    })
+    .then(() => openDatabase())
+    .then((db) => getData(db))
+    .then((data) => {
+      console.log("Retrieved data:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+
+  console.log("Extension background script is active.2");
 });
 
 const sharedDatabase = new CRUDService();
