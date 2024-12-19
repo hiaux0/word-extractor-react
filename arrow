@@ -7,3 +7,5 @@ package.json
 src/ui/pages/ContentScriptPage.tsx
 src/ui/organisms/AddTranslationCard.tsx
 src/components/language-tracker.tsx
+src/lib/modules/background.ts
+src/lib/StateService.ts

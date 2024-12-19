@@ -15,6 +15,8 @@ import { sharedDatabase } from "@/lib/sharedDatabase";
 import { CRUDMapService, CRUDService } from "@/lib/CRUDService";
 import { TypeService } from "@/lib/TypeService";
 import { mapSheetToSelectItem } from "@/lib/UserDefinedMappingService";
+import { useAtom } from "jotai";
+import { wordsDatabaseAtom } from "@/lib/StateService";
 
 const frameworks: ISelectItem[] = [
   {
@@ -40,11 +42,13 @@ const frameworks: ISelectItem[] = [
 ];
 
 // const dbMap = new CRUDMapService<IWordEntry>();
-const wordsDatabase = new CRUDService<IWordEntry>();
-wordsDatabase.setDefault(defaultWordEntry);
 const sheetsDatabase = new CRUDService<ISheet>();
+const wordsDatabase = new CRUDService<IWordEntry>();
 
 export function AddTranslationCard() {
+  const [words, setWords] = useAtom(wordsDatabaseAtom);
+  /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,50] words: ", words);
+
   const [inputSheet, selectInputSheet] = useState(frameworks[0]);
   /*prettier-ignore*/ console.log("-------------------------------------------------------------------");
   /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,46] inputSheet: ", inputSheet);
@@ -53,15 +57,20 @@ export function AddTranslationCard() {
   const [sheets, setSheets] = useState(frameworks);
 
   const createTranslation = useCallback(() => {
+    wordsDatabase.replace(words);
     const created = wordsDatabase.create({
       sheets: [inputSheet.value],
       text: "todo: selected",
-      translation,
-      comment,
+      //translation,
+      //comment,
+      translation: "todo: translation",
+      comment: "todo: comment",
     });
     /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,57] created: ", created);
 
-    // const updatedSheets = wordsDatabase.readAll();
+    const updated = wordsDatabase.readAll(true);
+    /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,72] updated: ", updated);
+    setWords(updated);
   }, [inputSheet, translation, comment]);
 
   const addNewSheet = useCallback((newItem: string) => {
@@ -73,7 +82,7 @@ export function AddTranslationCard() {
     const mappedArray = updated.map(mapSheetToSelectItem);
 
     if (mapped) selectInputSheet(mapped);
-  /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,75] mapped: ", mapped);
+    /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,75] mapped: ", mapped);
     setSheets(mappedArray);
   }, []);
 

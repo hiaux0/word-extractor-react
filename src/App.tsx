@@ -25,3 +25,17 @@ export const App: FC<Props> = (props) => {
     </>
   );
 };
+
+import React from "react";
+import ComponentA from "./ui/playground/ComponentA";
+import ComponentB from "./ui/playground/ComponentB";
+
+//export const App = () => (
+//  <div>
+//    <h1>Jotai Shared State Example</h1>
+//    <ComponentA />
+//    <ComponentB />
+//  </div>
+//);
+
+
