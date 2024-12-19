@@ -15,17 +15,18 @@ type Id = string;
  */
 export class CRUDService<T extends AnyObject> {
   private items: T[] = [];
+  private defaultItem: T;
   private activeItemId: Id;
 
-  constructor(public defaultItems?: any[]) {
-    if (defaultItems) {
-      defaultItems.forEach((item) => {
+  constructor(public initialItems?: any[]) {
+    if (initialItems) {
+      initialItems.forEach((item) => {
         if (item.id === undefined) {
           item.id = generateId();
         }
       });
 
-      this.items = defaultItems;
+      this.items = initialItems;
     }
   }
 
@@ -37,7 +38,7 @@ export class CRUDService<T extends AnyObject> {
     // @ts-ignore instantiated
     const finalItem: T = {
       id: generateId(),
-      ...this.defaultItems,
+      ...this.initialItems,
       ...item,
     };
     const { allowDuplicate, uniqueByKey } = options;
@@ -236,6 +237,26 @@ export class CRUDService<T extends AnyObject> {
       if (aValue === bValue) return 0;
       return ascending ? (aValue < bValue ? -1 : 1) : aValue > bValue ? -1 : 1;
     });
+  }
+
+  public setDefault(item: T): void {
+    this.defaultItem = item;
+  }
+}
+
+export class CRUDMapService<T extends AnyObject> {
+  private map: Record<string, CRUDService<T>> = {};
+
+  public initCRUD(key: string) {
+    this.map[key] = new CRUDService<T>();
+  }
+
+  public getCRUD(key: string): CRUDService<T> {
+    if (!this.map[key]) {
+      this.initCRUD(key);
+    }
+
+    return this.map[key];
   }
 }
 

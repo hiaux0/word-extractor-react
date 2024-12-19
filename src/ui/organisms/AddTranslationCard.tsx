@@ -2,42 +2,47 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useCallback, useState } from "react";
 import { Combobox } from "./Combobox/Combobox";
-import { ISelectItem } from "@/domain/types/types";
+import {
+  defaultWordEntry,
+  ISelectItem,
+  ISheet,
+  IWordEntry,
+} from "@/domain/types/types";
 import { sharedDatabase } from "@/lib/sharedDatabase";
+import { CRUDMapService, CRUDService } from "@/lib/CRUDService";
+import { TypeService } from "@/lib/TypeService";
+import { mapSheetToSelectItem } from "@/lib/UserDefinedMappingService";
 
 const frameworks: ISelectItem[] = [
-  //{
-  //  value: "next.js",
-  //  label: "Next.js",
-  //},
-  //{
-  //  value: "sveltekit",
-  //  label: "SvelteKit",
-  //},
-  //{
-  //  value: "nuxt.js",
-  //  label: "Nuxt.js",
-  //},
-  //{
-  //  value: "remix",
-  //  label: "Remix",
-  //},
-  //{
-  //  value: "astro",
-  //  label: "Astro",
-  //},
+  {
+    value: "next.js",
+    label: "Next.js",
+  },
+  {
+    value: "sveltekit",
+    label: "SvelteKit",
+  },
+  {
+    value: "nuxt.js",
+    label: "Nuxt.js",
+  },
+  {
+    value: "remix",
+    label: "Remix",
+  },
+  {
+    value: "astro",
+    label: "Astro",
+  },
 ];
+
+// const dbMap = new CRUDMapService<IWordEntry>();
+const wordsDatabase = new CRUDService<IWordEntry>();
+wordsDatabase.setDefault(defaultWordEntry);
+const sheetsDatabase = new CRUDService<ISheet>();
 
 export function AddTranslationCard() {
   const [inputSheet, selectInputSheet] = useState(frameworks[0]);
@@ -47,18 +52,29 @@ export function AddTranslationCard() {
   const [comment, addComment] = useState("");
   const [sheets, setSheets] = useState(frameworks);
 
-  const completeTranslation = useCallback(() => {
-    const newEntry = { value: inputSheet.value, label: translation, comment };
-    sharedDatabase.create(newEntry);
-    const updatedSheets = sharedDatabase.readAll();
-    setSheets(updatedSheets);
+  const createTranslation = useCallback(() => {
+    const created = wordsDatabase.create({
+      sheets: [inputSheet.value],
+      text: "todo: selected",
+      translation,
+      comment,
+    });
+    /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,57] created: ", created);
+
+    // const updatedSheets = wordsDatabase.readAll();
   }, [inputSheet, translation, comment]);
 
-  const addNewItem = useCallback((newItem: string) => {
-    const created = sharedDatabase.create({ value: newItem, label: newItem });
-    const updated = sharedDatabase.readAll();
-    setSheets(updated);
-    if (created) selectInputSheet(created);
+  const addNewSheet = useCallback((newItem: string) => {
+    const created = sheetsDatabase.create({ name: newItem });
+    if (!created) return;
+    const updated = sheetsDatabase.readAll();
+
+    const mapped = mapSheetToSelectItem(created);
+    const mappedArray = updated.map(mapSheetToSelectItem);
+
+    if (mapped) selectInputSheet(mapped);
+  /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,75] mapped: ", mapped);
+    setSheets(mappedArray);
   }, []);
 
   return (
@@ -72,7 +88,7 @@ export function AddTranslationCard() {
                 items={sheets}
                 activeItem={inputSheet}
                 placeholder="Select sheet"
-                onAddNewItem={addNewItem}
+                onAddNewItem={addNewSheet}
                 onSelectItem={selectInputSheet}
               />
             </div>
@@ -95,7 +111,7 @@ export function AddTranslationCard() {
         </form>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button size="sm" onClick={() => completeTranslation()}>
+        <Button size="sm" onClick={() => createTranslation()}>
           Add
         </Button>
       </CardFooter>

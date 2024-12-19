@@ -32,3 +32,30 @@ export interface Browser {
   };
   // [ "manifest", "events", "types", "bookmarks", "browsingData", "captivePortal", "commands", "devtools", "find", "history", "identity", "contextMenus", "menus", "omnibox", "pageAction", "pkcs11", "geckoProfiler", "search", "sessions", "sidebarAction", "topSites", "tabs", "windows", "extensionTypes", "browserSettings", "clipboard", "alarms", "contextualIdentities", "contentScripts", "dns", "cookies", "declarativeNetRequest", "activityLog", "downloads", "idle", "management", "networkStatus", "notifications", "permissions", "privacy", "proxy", "scripting", "telemetry", "theme", "userScripts", "webNavigation", "experiments", "webRequest", "normandyAddonStudy", "i18n", "extension", "runtime", "test", "storage", "menusInternal", "pictureInPictureChild", "aboutConfigPrefs", "browserAction" ]
 }
+
+export interface IWordEntry {
+  id: string;
+  text: string;
+  context?: string;
+  translation: string;
+  comment: string;
+  sheets: string[];
+}
+export const defaultWordEntry: IWordEntry = {
+  id: "",
+  text: "",
+  translation: "",
+  comment: "",
+  sheets: [],
+};
+
+export interface ISheet {
+  id: string;
+  name: string;
+}
+
+export interface IDatabase {
+  sheetsMap: Record<string, IWordEntry[]>;
+  words: IWordEntry[];
+  sheets: string[];
+}

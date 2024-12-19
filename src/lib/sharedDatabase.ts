@@ -1,6 +1,6 @@
 import { CRUDService } from "@/lib/CRUDService";
-import { AnyObject } from "@/domain/types/types";
+import { IWordEntry } from "@/domain/types/types";
 
-const sharedDatabase = new CRUDService<AnyObject>();
+const sharedDatabase = new CRUDService<IWordEntry>();
 
 export { sharedDatabase };
