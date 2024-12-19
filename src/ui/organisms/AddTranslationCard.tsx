@@ -13,8 +13,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useCallback, useState } from "react";
 import { Combobox } from "./Combobox/Combobox";
-import { CRUDService } from "@/lib/CRUDService";
 import { ISelectItem } from "@/domain/types/types";
+import { sharedDatabase } from "@/lib/sharedDatabase";
 
 const frameworks: ISelectItem[] = [
   //{
@@ -39,8 +39,6 @@ const frameworks: ISelectItem[] = [
   //},
 ];
 
-const sheetsCRUD = new CRUDService<ISelectItem>(frameworks);
-
 export function AddTranslationCard() {
   const [inputSheet, selectInputSheet] = useState(frameworks[0]);
   /*prettier-ignore*/ console.log("-------------------------------------------------------------------");
@@ -50,13 +48,15 @@ export function AddTranslationCard() {
   const [sheets, setSheets] = useState(frameworks);
 
   const completeTranslation = useCallback(() => {
-    const asht = [inputSheet, translation, comment];
-    /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,54] asht: ", asht);
+    const newEntry = { value: inputSheet.value, label: translation, comment };
+    sharedDatabase.create(newEntry);
+    const updatedSheets = sharedDatabase.readAll();
+    setSheets(updatedSheets);
   }, [inputSheet, translation, comment]);
 
   const addNewItem = useCallback((newItem: string) => {
-    const created = sheetsCRUD.create({ value: newItem, label: newItem });
-    const updated = sheetsCRUD.readAll();
+    const created = sharedDatabase.create({ value: newItem, label: newItem });
+    const updated = sharedDatabase.readAll();
     setSheets(updated);
     if (created) selectInputSheet(created);
   }, []);
