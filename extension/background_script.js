@@ -1,9 +1,10 @@
-// Put all the javascript code here, that you want to execute in background.
-
-console.log("Extension background script is active.");
-
+console.log("Extension background script is active.1");
 
 browser.contextMenus.create({
   id: "collect-image",
-  title: "Add to the collected images",
+  title: "Add to the collected images 1",
+});
+
+browser.browserAction.onClicked.addListener(() => {
+  browser.tabs.create({ url: "/navigate-collection.html" });
 });

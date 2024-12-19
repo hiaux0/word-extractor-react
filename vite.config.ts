@@ -12,6 +12,9 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  define: {
+    browser: "browser",
+  },
   build: {
     outDir: "extension/dist",
     rollupOptions: {

@@ -1,7 +1,7 @@
 extension/manifest.json
 arrow
-package.json
 vite.config.ts
+package.json
 index.html
 src/ui/pages/ContentScriptPage.tsx
 src/ui/organisms/AddTranslationCard.tsx
