@@ -8,6 +8,7 @@ import { PlusCircle, Trash2, Download, Search } from 'lucide-react'
 import { useTheme } from "next-themes"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
+import { CRUDService } from "@/lib/CRUDService"
 
 interface WordEntry {
   id: string
@@ -18,21 +19,25 @@ interface WordEntry {
   comments: string
 }
 
+const sharedDatabase = new CRUDService<WordEntry>()
+
 export default function LanguageTracker() {
   const [entries, setEntries] = useState<WordEntry[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const { theme, setTheme } = useTheme()
 
   useEffect(() => {
-    const storedEntries = localStorage.getItem("languageEntries")
-    if (storedEntries) {
-      setEntries(JSON.parse(storedEntries))
-    }
+    loadEntriesFromDatabase()
   }, [])
 
-  useEffect(() => {
-    localStorage.setItem("languageEntries", JSON.stringify(entries))
-  }, [entries])
+  const loadEntriesFromDatabase = () => {
+    const storedEntries = sharedDatabase.readAll()
+    setEntries(storedEntries)
+  }
+
+  const saveEntriesToDatabase = (entries: WordEntry[]) => {
+    sharedDatabase.replace(entries)
+  }
 
   const addNewEntry = () => {
     const newEntry: WordEntry = {
@@ -43,7 +48,9 @@ export default function LanguageTracker() {
       originLanguageMeaning: "",
       comments: "",
     }
-    setEntries([...entries, newEntry])
+    const updatedEntries = [...entries, newEntry]
+    setEntries(updatedEntries)
+    saveEntriesToDatabase(updatedEntries)
   }
 
   const updateEntry = (id: string, field: keyof WordEntry, value: string) => {
@@ -51,11 +58,13 @@ export default function LanguageTracker() {
       entry.id === id ? { ...entry, [field]: value } : entry
     )
     setEntries(updatedEntries)
+    saveEntriesToDatabase(updatedEntries)
   }
 
   const deleteEntry = (id: string) => {
     const updatedEntries = entries.filter((entry) => entry.id !== id)
     setEntries(updatedEntries)
+    saveEntriesToDatabase(updatedEntries)
   }
 
   const exportData = () => {
@@ -191,4 +200,3 @@ export default function LanguageTracker() {
     </div>
   )
 }
-
