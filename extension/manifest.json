@@ -14,10 +14,6 @@
       "matches": ["<all_urls>"],
       "js": ["dist/assets/contentScript.js", "dist/assets/app.js"],
       "css": ["dist/app.css"]
-    },
-    {
-      "matches": ["<all_urls>"],
-      "js": ["dist/assets/newContentScript.js"]
     }
   ],
   "browser_action": {

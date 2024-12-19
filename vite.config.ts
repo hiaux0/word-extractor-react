@@ -1,7 +1,6 @@
 import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { fileURLToPath } from "url";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -12,35 +11,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  define: {
-    // browser: "browser",
-  },
   build: {
     outDir: "extension/dist",
-    rollupOptions: {
-      input: {
-        background: fileURLToPath(
-          new URL("./src/lib/modules/background.ts", import.meta.url),
-        ),
-        contentScript: fileURLToPath(
-          new URL("./src/lib/modules/contentScript.ts", import.meta.url),
-        ),
-        // browserAction: fileURLToPath(new URL("./src/ui/pages/browserAction/index.html", import.meta.url)),
-        app: fileURLToPath(new URL("./index.html", import.meta.url)),
-      },
-      output: {
-        assetFileNames: (assetInfo) => {
-          return assetInfo.names[0];
-        },
-        entryFileNames: (_entryInfo) => {
-          //const keepNames = ["contentScript"];
-          //if (keepNames.includes(entryInfo.name)) {
-          //  return "assets/[name].js";
-          //}
-          return "assets/[name].js";
-          // return "assets/[name].[hash].js";
-        },
-      },
-    },
   },
 });

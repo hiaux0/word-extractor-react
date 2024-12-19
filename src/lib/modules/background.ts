@@ -1,21 +1,10 @@
-console.log("Extension background script is active.2");
+import { Browser } from "@/domain/types/types";
+import { CRUDService } from "../CRUDService";
+import { getData, openDatabase, saveData } from "../CommunicationService";
 
-declare var browser: Browser & typeof globalThis;
-interface Browser {
-  browserAction: {
-    onClicked: {
-      addListener: (callback: () => void) => void;
-    };
-    // [ "onClicked", "setTitle", "getTitle", "getUserSettings", "setIcon", "setPopup", "getPopup", "setBadgeText", "getBadgeText", "setBadgeBackgroundColor", "getBadgeBackgroundColor", "setBadgeTextColor", "getBadgeTextColor", "enable", "disable", "isEnabled", "openPopup", "Details", "ColorArray", "ImageDataType", "ColorValue", "OnClickData"]
-  };
-  contextMenus: {
-    create: (options: any) => void;
-  };
-  tabs: {
-    create: (options: { url: string }) => void;
-  };
-  // [ "manifest", "events", "types", "bookmarks", "browsingData", "captivePortal", "commands", "devtools", "find", "history", "identity", "contextMenus", "menus", "omnibox", "pageAction", "pkcs11", "geckoProfiler", "search", "sessions", "sidebarAction", "topSites", "tabs", "windows", "extensionTypes", "browserSettings", "clipboard", "alarms", "contextualIdentities", "contentScripts", "dns", "cookies", "declarativeNetRequest", "activityLog", "downloads", "idle", "management", "networkStatus", "notifications", "permissions", "privacy", "proxy", "scripting", "telemetry", "theme", "userScripts", "webNavigation", "experiments", "webRequest", "normandyAddonStudy", "i18n", "extension", "runtime", "test", "storage", "menusInternal", "pictureInPictureChild", "aboutConfigPrefs", "browserAction" ]
-}
+// Usage example
+
+export declare var browser: Browser & typeof globalThis;
 
 browser.contextMenus.create({
   id: "collect-image",
@@ -25,4 +14,45 @@ browser.contextMenus.create({
 browser.browserAction.onClicked.addListener(() => {
   /*prettier-ignore*/ console.log("[background.ts,28] addListener: ", );
   browser.tabs.create({ url: "dist/index.html" });
+
+  openDatabase()
+    .then((db) => {
+      /*prettier-ignore*/ console.log("[CommunicationService.ts,59] db: ", db);
+      //const data = { id: 1, name: "John Doe", preferences: { theme: "dark" } };
+      //return saveData(db, data);
+    })
+    .then(() => openDatabase())
+    .then((db) => getData(db))
+    .then((data) => {
+      console.log("Retrieved data:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+
+  console.log("Extension background script is active.2");
+});
+
+const sharedDatabase = new CRUDService();
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  switch (message.action) {
+    case "create":
+      sharedDatabase.create(message.entry);
+      sendResponse({ success: true });
+      break;
+    case "read":
+      const entries = sharedDatabase.readAll();
+      sendResponse({ success: true, entries });
+      break;
+    case "update":
+      sharedDatabase.update(message.entry);
+      sendResponse({ success: true });
+      break;
+    case "delete":
+      sharedDatabase.delete(message.entryId);
+      sendResponse({ success: true });
+      break;
+    default:
+      sendResponse({ error: "Unknown action" });
+  }
 });
