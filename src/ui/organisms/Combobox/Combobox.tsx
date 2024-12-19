@@ -60,7 +60,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
           {value ? (
             items.find((item) => item.value === value)?.label
           ) : items.length === 0 ? (
-            <div className="text-muted-foreground">Add item</div>
+            <div className="text-muted-foreground">No items yet. Add</div>
           ) : (
             placeholder && (
               <div className="text-muted-foreground">Select item...</div>

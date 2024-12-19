@@ -7,7 +7,7 @@
     "64": "icons/icon.png"
   },
   "background": {
-    "scripts": ["background_script.js"]
+    "scripts": ["dist/assets/browser.js"]
   },
   "content_scripts": [
     {

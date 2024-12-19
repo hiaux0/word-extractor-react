@@ -16,6 +16,9 @@ export default defineConfig({
     outDir: "extension/dist",
     rollupOptions: {
       input: {
+        background: fileURLToPath(
+          new URL("./src/lib/modules/background.ts", import.meta.url),
+        ),
         contentScript: fileURLToPath(
           new URL("./src/lib/modules/contentScript.ts", import.meta.url),
         ),
