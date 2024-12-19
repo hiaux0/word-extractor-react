@@ -13,7 +13,7 @@ export default defineConfig({
     },
   },
   define: {
-    browser: "browser",
+    // browser: "browser",
   },
   build: {
     outDir: "extension/dist",

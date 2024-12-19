@@ -2,6 +2,7 @@ import { ComponentProps, FC } from "react";
 import "./App.css";
 import { ContentScriptPage } from "./ui/pages/ContentScriptPage";
 import { DemoPage } from "./ui/pages/DemoPage";
+import LanguageTracker from "./components/language-tracker";
 
 interface Props extends ComponentProps<any> {
   root: HTMLElement | null;
@@ -20,7 +21,7 @@ export const App: FC<Props> = (props) => {
   return (
     <>
       {isContent && <ContentScriptPage />}
-      {isBrowserAction && <h1>Browser Action</h1>}
+      {isBrowserAction && <LanguageTracker />}
     </>
   );
 };
