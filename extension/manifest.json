@@ -32,5 +32,5 @@
   "options_ui": {
     "page": "options/index.html"
   },
-  "permissions": ["activeTab", "contextMenus", "<all_urls>"]
+  "permissions": ["activeTab", "contextMenus", "<all_urls>", "storage", "tabs"]
 }
