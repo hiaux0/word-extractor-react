@@ -1,3 +1,21 @@
+# UI Components
+
+## Table
+
+### Pagination
+- https://ui.shadcn.com/docs/components/data-table#pagination
+- This will automatically paginate your rows into pages of 10. See the pagination docs for more information on customizing page size and implementing manual pagination.
+    - https://tanstack.com/table/v8/docs/api/features/pagination
+- `getPaginationRowModel: getPaginationRowModel(), `
+
+- See Reusable Components section for a more advanced pagination component.
+    - https://ui.shadcn.com/docs/components/data-table#reusable-components
+
+### Sorting
+getSortedRowModel
+
+### Visibility
+VisibilityState
 
 # Anatomy of an extension
 - Background scripts
