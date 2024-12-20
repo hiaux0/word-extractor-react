@@ -24,9 +24,9 @@ const CONSTANTS = {
 };
 const adjust = 16;
 
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("hi");
-});
+//document.addEventListener("DOMContentLoaded", () => {
+//  console.log("DOMContentLoaded");
+//});
 
 /**
  * @returns {string[]}

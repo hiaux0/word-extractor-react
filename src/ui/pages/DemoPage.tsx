@@ -9,7 +9,7 @@ interface DemoPageProps extends ComponentProps<any> {}
 export const DemoPage: FC<DemoPageProps> = (props) => {
   const { style } = props;
   return (
-    <Provider>
+    <div>
       <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr />
 
       <LanguageTracker />
@@ -19,6 +19,6 @@ export const DemoPage: FC<DemoPageProps> = (props) => {
       <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr />
 
       <AddTranslationCard />
-    </Provider>
+    </div>
   );
 };

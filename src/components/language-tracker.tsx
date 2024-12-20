@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import { CRUDService } from "@/lib/CRUDService";
 import { defaultWordEntry, IWordEntry } from "@/domain/types/types";
 import { useAtom } from "jotai";
-import { wordsDatabaseAtom } from "@/lib/StateService";
+import { wordsDatabaseAtom } from "@/lib/StateAtom";
 
 const sharedDatabase = new CRUDService<IWordEntry>();
 

@@ -5,18 +5,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useCallback, useState } from "react";
 import { Combobox } from "./Combobox/Combobox";
-import {
-  defaultWordEntry,
-  ISelectItem,
-  ISheet,
-  IWordEntry,
-} from "@/domain/types/types";
-import { sharedDatabase } from "@/lib/sharedDatabase";
-import { CRUDMapService, CRUDService } from "@/lib/CRUDService";
-import { TypeService } from "@/lib/TypeService";
+import { ISelectItem, ISheet, IWordEntry } from "@/domain/types/types";
+import { CRUDService } from "@/lib/CRUDService";
 import { mapSheetToSelectItem } from "@/lib/UserDefinedMappingService";
 import { useAtom } from "jotai";
-import { wordsDatabaseAtom } from "@/lib/StateService";
+import { wordsDatabaseAtom } from "@/lib/StateAtom";
 
 const frameworks: ISelectItem[] = [
   {
@@ -47,7 +40,6 @@ const wordsDatabase = new CRUDService<IWordEntry>();
 
 export function AddTranslationCard() {
   const [words, setWords] = useAtom(wordsDatabaseAtom);
-  /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,50] words: ", words);
 
   const [inputSheet, selectInputSheet] = useState(frameworks[0]);
   const [translation, addTranslation] = useState("");
@@ -55,14 +47,16 @@ export function AddTranslationCard() {
   const [sheets, setSheets] = useState(frameworks);
 
   const createTranslation = useCallback(() => {
+    const source = window.location.href;
     wordsDatabase.replace(words);
-    const created = wordsDatabase.create({
+    wordsDatabase.create({
       sheets: [inputSheet.value],
       text: "todo: selected",
       //translation,
       //comment,
       translation: "todo: translation",
       comment: "todo: comment",
+      source,
     });
 
     const updated = wordsDatabase.readAll(true);
