@@ -10,11 +10,13 @@ export const DemoPage: FC<DemoPageProps> = (props) => {
   const { style } = props;
   return (
     <Provider>
+      <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr />
+
       <LanguageTracker />
-      <hr />
+      <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr />
 
       <Combobox items={[]} />
-      <hr />
+      <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr />
 
       <AddTranslationCard />
     </Provider>

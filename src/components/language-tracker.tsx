@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -9,40 +9,21 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { PlusCircle, Trash2, Download, Search } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { CRUDService } from "@/lib/CRUDService";
 import { defaultWordEntry, IWordEntry } from "@/domain/types/types";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 import { wordsDatabaseAtom } from "@/lib/StateService";
 
 const sharedDatabase = new CRUDService<IWordEntry>();
 
 export default function LanguageTracker() {
-  const words = useAtomValue(wordsDatabaseAtom);
-  /*prettier-ignore*/ console.log("[language-tracker.tsx,33] words: ", words);
-  const [entries, setEntries] = useState<IWordEntry[]>([]);
+  const [entries, setEntries] = useAtom(wordsDatabaseAtom);
   const [searchTerm, setSearchTerm] = useState("");
   const { theme, setTheme } = useTheme();
-
-  useEffect(() => {
-    loadEntriesFromDatabase();
-  }, []);
-
-  const loadEntriesFromDatabase = () => {
-    const storedEntries = sharedDatabase.readAll();
-    setEntries(storedEntries);
-  };
 
   const saveEntriesToDatabase = (entries: IWordEntry[]) => {
     sharedDatabase.replace(entries);
@@ -91,7 +72,7 @@ export default function LanguageTracker() {
 
   return (
     <div className="space-y-4">
-      {words.length}
+      {entries.length}
       <div className="flex justify-between items-center">
         <div className="flex items-center space-x-2">
           <Search className="w-5 h-5 text-gray-400" />
@@ -124,115 +105,75 @@ export default function LanguageTracker() {
           </Button>
         </div>
       </div>
-      <div className="overflow-x-auto">here asht</div>
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Context</TableHead>
+              <TableHead>Translation</TableHead>
+              <TableHead>Comment</TableHead>
+              <TableHead>Link</TableHead>
+              <TableHead className="w-[100px]">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredEntries.map((entry) => (
+              <TableRow key={entry.id}>
+                <TableCell>
+                  <Input
+                    type="text"
+                    value={entry.text}
+                    onChange={(e) =>
+                      updateEntry(entry.id, "text", e.target.value)
+                    }
+                    placeholder="Enter original word"
+                  />
+                </TableCell>
+                <TableCell>
+                  <Input
+                    type="text"
+                    value={entry.translation}
+                    onChange={(e) =>
+                      updateEntry(entry.id, "translation", e.target.value)
+                    }
+                    placeholder="Enter mother tongue meaning"
+                  />
+                </TableCell>
+                <TableCell>
+                  <Input
+                    type="text"
+                    value={entry.comment}
+                    onChange={(e) =>
+                      updateEntry(entry.id, "comment", e.target.value)
+                    }
+                    placeholder="Enter origin language meaning"
+                  />
+                </TableCell>
+                <TableCell>
+                  <Input
+                    type="text"
+                    value={entry.source}
+                    onChange={(e) =>
+                      updateEntry(entry.id, "source", e.target.value)
+                    }
+                    placeholder="Enter origin language meaning"
+                  />
+                </TableCell>
+
+                <TableCell>
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    onClick={() => deleteEntry(entry.id)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
-
-// <Table>
-//<TableHeader>
-//  <TableRow>
-//    <TableHead>Language</TableHead>
-//    <TableHead>Original Word</TableHead>
-//    <TableHead>Mother Tongue Meaning</TableHead>
-//    <TableHead>Origin Language Meaning</TableHead>
-//    <TableHead>Comments</TableHead>
-//    <TableHead className="w-[100px]">Actions</TableHead>
-//  </TableRow>
-//</TableHeader>
-//<TableBody>
-//  {filteredEntries.map((entry) => (
-//    <TableRow key={entry.id}>
-//      <TableCell>
-//        <Select
-//          value={entry.languageType}
-//          onValueChange={(value) =>
-//            updateEntry(entry.id, "languageType", value)
-//          }
-//        >
-//          <SelectTrigger className="w-[180px]">
-//            <SelectValue placeholder="Select Language" />
-//          </SelectTrigger>
-//          <SelectContent>
-//            <SelectItem value="VN">Vietnamese (VN)</SelectItem>
-//            <SelectItem value="DE">German (DE)</SelectItem>
-//            <SelectItem value="custom">Custom</SelectItem>
-//          </SelectContent>
-//        </Select>
-//        {entry.languageType === "custom" && (
-//          <Input
-//            type="text"
-//            placeholder="Enter custom language"
-//            value={
-//              entry.languageType === "custom"
-//                ? ""
-//                : entry.languageType
-//            }
-//            onChange={(e) =>
-//              updateEntry(entry.id, "languageType", e.target.value)
-//            }
-//            className="mt-2"
-//          />
-//        )}
-//      </TableCell>
-//      <TableCell>
-//        <Input
-//          type="text"
-//          value={entry.original}
-//          onChange={(e) =>
-//            updateEntry(entry.id, "originalWord", e.target.value)
-//          }
-//          placeholder="Enter original word"
-//        />
-//      </TableCell>
-//      <TableCell>
-//        <Input
-//          type="text"
-//          value={entry.motherTongueMeaning}
-//          onChange={(e) =>
-//            updateEntry(
-//              entry.id,
-//              "motherTongueMeaning",
-//              e.target.value,
-//            )
-//          }
-//          placeholder="Enter mother tongue meaning"
-//        />
-//      </TableCell>
-//      <TableCell>
-//        <Input
-//          type="text"
-//          value={entry.originLanguageMeaning}
-//          onChange={(e) =>
-//            updateEntry(
-//              entry.id,
-//              "originLanguageMeaning",
-//              e.target.value,
-//            )
-//          }
-//          placeholder="Enter origin language meaning"
-//        />
-//      </TableCell>
-//      <TableCell>
-//        <Textarea
-//          value={entry.comments}
-//          onChange={(e) =>
-//            updateEntry(entry.id, "comments", e.target.value)
-//          }
-//          placeholder="Add comments (optional)"
-//          className="min-h-[60px]"
-//        />
-//      </TableCell>
-//      <TableCell>
-//        <Button
-//          variant="destructive"
-//          size="icon"
-//          onClick={() => deleteEntry(entry.id)}
-//        >
-//          <Trash2 className="w-4 h-4" />
-//        </Button>
-//      </TableCell>
-//    </TableRow>
-//  ))}
-//</TableBody>
-// </Table>

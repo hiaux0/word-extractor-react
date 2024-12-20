@@ -50,8 +50,6 @@ export function AddTranslationCard() {
   /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,50] words: ", words);
 
   const [inputSheet, selectInputSheet] = useState(frameworks[0]);
-  /*prettier-ignore*/ console.log("-------------------------------------------------------------------");
-  /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,46] inputSheet: ", inputSheet);
   const [translation, addTranslation] = useState("");
   const [comment, addComment] = useState("");
   const [sheets, setSheets] = useState(frameworks);
@@ -66,10 +64,8 @@ export function AddTranslationCard() {
       translation: "todo: translation",
       comment: "todo: comment",
     });
-    /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,57] created: ", created);
 
     const updated = wordsDatabase.readAll(true);
-    /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,72] updated: ", updated);
     setWords(updated);
   }, [inputSheet, translation, comment]);
 
@@ -82,7 +78,6 @@ export function AddTranslationCard() {
     const mappedArray = updated.map(mapSheetToSelectItem);
 
     if (mapped) selectInputSheet(mapped);
-    /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,75] mapped: ", mapped);
     setSheets(mappedArray);
   }, []);
 

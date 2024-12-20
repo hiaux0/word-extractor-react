@@ -36,9 +36,9 @@ export interface Browser {
 export interface IWordEntry {
   id: string;
   text: string;
-  context?: string;
   translation: string;
   comment: string;
+  source: string;
   sheets: string[];
 }
 export const defaultWordEntry: IWordEntry = {
@@ -46,6 +46,7 @@ export const defaultWordEntry: IWordEntry = {
   text: "",
   translation: "",
   comment: "",
+  source: "",
   sheets: [],
 };
 
