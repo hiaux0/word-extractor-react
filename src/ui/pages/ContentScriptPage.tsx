@@ -3,6 +3,7 @@ import {
   FC,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -123,6 +124,11 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
   const [rectCoords, setRectCoords] = useState({ x: -1, y: -1 });
   const mouseDownCoords = useRef({ x: -1, y: -1 });
 
+  const hidden = useMemo(
+    () => rectCoords.x === -1 && rectCoords.y === -1,
+    [rectCoords.x, rectCoords.y],
+  );
+
   useEffect(() => {
     const handleMouseDown = (event: MouseEvent) => {
       mouseDownCoords.current = { x: event.clientX, y: event.clientY };
@@ -130,14 +136,17 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
     };
 
     const handleMouseUp = (event: MouseEvent) => {
+      /*prettier-ignore*/ console.log("[ContentScriptPage.tsx,128] hidden: ", hidden);
+      if (!hidden) return;
+
       /*prettier-ignore*/ console.log("[ContentScriptPage.tsx,133] event: ", event);
       let { x, y } = mouseDownCoords.current;
       const sameX = x === event.clientX;
       const sameY = y === event.clientY;
-      if (sameX && sameY) {
-        setRectCoords({ x: -1, y: -1 });
-        return;
-      }
+      //if (sameX && sameY) {
+      //  setRectCoords({ x: -1, y: -1 });
+      //  return;
+      //}
 
       const ax = Math.max(x, event.clientX);
       const maxY = Math.max(y, event.clientY);
@@ -157,15 +166,13 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
     };
   }, []);
 
-  const hide = rectCoords.x === -1 && rectCoords.y === -1;
-
   return (
     <div
       style={{
         position: "absolute",
         top: rectCoords.y,
         left: rectCoords.x,
-        display: hide ? "none" : "block",
+        display: hidden ? "none" : "block",
         backgroundColor: "white",
         ...style,
       }}

@@ -16,7 +16,7 @@ export const App: FC<Props> = (props) => {
   const isContent = root.dataset.isContent === "true";
   const isBrowserAction = root.dataset.isBrowserAction === "true";
 
-  if (isLocalHost) return <DemoPage />;
+  // if (isLocalHost) return <DemoPage />;
 
   return (
     <>

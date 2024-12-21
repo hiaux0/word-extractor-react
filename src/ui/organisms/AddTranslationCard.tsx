@@ -47,6 +47,7 @@ export function AddTranslationCard() {
   const [sheets, setSheets] = useState(frameworks);
 
   const createTranslation = useCallback(() => {
+    /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,50] createTranslation: ", );
     const source = window.location.href;
     wordsDatabase.replace(words);
     wordsDatabase.create({

@@ -13,5 +13,20 @@ export default defineConfig({
   },
   build: {
     outDir: "extension/dist",
+    rollupOptions: {
+      output: {
+        assetFileNames: (assetInfo) => {
+          return assetInfo.names[0];
+        },
+        entryFileNames: (_entryInfo) => {
+          //const keepNames = ["contentScript"];
+          //if (keepNames.includes(entryInfo.name)) {
+          //  return "assets/[name].js";
+          //}
+          return "assets/[name].js";
+          // return "assets/[name].[hash].js";
+        },
+      },
+    },
   },
 });

@@ -16,7 +16,7 @@ export default defineConfig({
     // browser: "browser",
   },
   build: {
-    outDir: "extension/dist",
+    outDir: "extension",
     rollupOptions: {
       input: {
         background: fileURLToPath(
@@ -35,7 +35,7 @@ export default defineConfig({
           //if (keepNames.includes(entryInfo.name)) {
           //  return "assets/[name].js";
           //}
-          return "assets/[name].js";
+          return "background/[name].js";
           // return "assets/[name].[hash].js";
         },
       },

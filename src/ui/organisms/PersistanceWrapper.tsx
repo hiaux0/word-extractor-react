@@ -22,6 +22,7 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
 
       setLoaded(true);
     } else {
+      console.log("[PersistanceWrapper.tsx,21] words: ", words);
       localStorageService.set(words);
     }
   }, [words]);
