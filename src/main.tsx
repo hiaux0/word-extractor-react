@@ -5,11 +5,10 @@ import "./index.css";
 import { Provider } from "jotai";
 import { PersistanceWrapper } from "./ui/organisms/PersistanceWrapper";
 
-const root = document.getElementById("root");
-createRoot(root!).render(
+createRoot(document.getElementById("root")!).render(
   <Provider>
     <PersistanceWrapper>
-      <App root={root} />
+      <App root={document.getElementById("root")} />
     </PersistanceWrapper>
   </Provider>,
 );

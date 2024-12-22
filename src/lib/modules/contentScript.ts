@@ -3,8 +3,7 @@ import { contentScriptCommunicationService } from "../CommunicationService";
 
 console.log("0. Extension content script is active.");
 
-const $root = document.getElementById("root");
-if (!$root) {
+if (!document.getElementById("root")) {
   const container = document.createElement("div");
   container.id = "root";
   container.dataset.isContent = "true";
