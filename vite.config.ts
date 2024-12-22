@@ -13,6 +13,11 @@ export default defineConfig({
   },
   build: {
     // sourcemap: true,
+    minify: false,
+    terserOptions: {
+      compress: false,
+      mangle: false,
+    },
     outDir: "extension/dist",
     rollupOptions: {
       output: {
