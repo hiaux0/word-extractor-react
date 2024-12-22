@@ -4,6 +4,8 @@ import { localStorageService } from "@/lib/PersistanceService";
 import { wordsDatabaseAtom } from "@/lib/StateAtom";
 import { contentScriptCommunicationService } from "@/lib/CommunicationService";
 import { MESSAGES } from "@/lib/common/constants";
+import { backgroundPersistanceService } from "@/lib/BackgroundPersistanceService";
+import { IWordEntry } from "@/domain/types/types";
 
 contentScriptCommunicationService.initListeners();
 
@@ -23,7 +25,13 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
   useEffect(() => {
     if (!loaded) {
       if (words.length === 0) {
-        if (isBrowserAction) return setLoaded(true);
+        if (isBrowserAction) {
+          backgroundPersistanceService.get<IWordEntry[]>().then((data) => {
+            setWords(data);
+          });
+          return setLoaded(true);
+        }
+
         const loadedWords = localStorageService.get();
         /*prettier-ignore*/ console.log("[ ][C] Loaded words from localStorage", loadedWords);
         if (loadedWords.length === 0) return setLoaded(true);

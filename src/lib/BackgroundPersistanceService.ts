@@ -42,7 +42,7 @@ class BackgroundPersistanceService implements IPersistanceService {
     return openedDb;
   }
 
-  public get() {
+  public get<T = any>(): Promise<T> {
     return new Promise(async (resolve, reject) => {
       // TODO: db is undefined
       const ensuredDb = await this.getDatabase();
