@@ -1,6 +1,6 @@
 import { Browser } from "@/domain/types/types";
 
-console.log("0. Extension content script is active.");
+console.log("[ ][C] 0. Extension content script is active.");
 
 if (!document.getElementById("root")) {
   const container = document.createElement("div");

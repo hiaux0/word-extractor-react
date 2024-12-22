@@ -14,13 +14,15 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
   const { children } = props;
   const [words, setWords] = useAtom(wordsDatabaseAtom);
   const [loaded, setLoaded] = useState(false);
+  /*prettier-ignore*/ console.log("[PersistanceWrapper.tsx,17] loaded: ", loaded);
+
+  const isBrowserAction =
+    document.getElementById("root")?.dataset.isBrowserAction === "true";
 
   useEffect(() => {
-    /*prettier-ignore*/ console.log("-------------------------------------------------------------------");
     if (!loaded) {
       if (words.length === 0) {
         const loadedWords = localStorageService.get();
-        /*prettier-ignore*/ console.log("1. [PersistanceWrapper.tsx,21] loadedWords: ", loadedWords);
         contentScriptCommunicationService.send({
           payload: loadedWords,
           action: "database:sync",
@@ -30,7 +32,7 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
 
       setLoaded(true);
     } else {
-      console.log("[PersistanceWrapper.tsx,21] words: ", words);
+      if (isBrowserAction) return;
       localStorageService.set(words);
     }
   }, [words]);

@@ -1,6 +1,6 @@
 import { Browser, IConnection, IMessagePayload } from "@/domain/types/types";
 import { ICommunicationService } from "./CommunicationService";
-import { browserMessageStorageService } from "./BrowserMessageStorageService";
+import { backgroundPersistanceService } from "./BackgroundPersistanceService";
 
 export declare var browser: Browser & typeof globalThis;
 
@@ -14,13 +14,13 @@ export class BackgroundCommunicationService implements ICommunicationService {
       //  greeting: "[B1 Background] hi there content script!",
       //});
       this.port.onMessage.addListener((m: IMessagePayload) => {
-        /*prettier-ignore*/ console.log("[CommunicationService.ts,61] m: ", m);
         switch (m.action) {
           case "database:sync": {
-            browserMessageStorageService.set(m.payload);
+            backgroundPersistanceService.set(m.payload);
             break;
           }
           default: {
+            /*prettier-ignore*/ console.log("[BackgroundCommunicationService.ts,26] m: ", m);
             console.error("No known action: ", m.action);
           }
         }
@@ -34,10 +34,11 @@ export class BackgroundCommunicationService implements ICommunicationService {
   }
 
   public initListeners() {
-    browser.browserAction.onClicked.addListener(() => {
-      this.port.postMessage({
-        greeting: "[B3 Background] they clicked the button!",
-      });
+    browser.browserAction.onClicked.addListener(async () => {
+      browser.tabs.create({ url: "dist/index.html" });
+
+      const data = await backgroundPersistanceService.get();
+      /*prettier-ignore*/ console.log("[BackgroundCommunicationService.ts,41] data: ", data);
     });
   }
 

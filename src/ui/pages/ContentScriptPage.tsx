@@ -105,7 +105,7 @@ document.addEventListener("keydown", (event) => {
     //  console.log("save");
     //  break;
     default:
-      console.log("other key is pressed");
+      // console.log("other key is pressed");
   }
 });
 
@@ -121,8 +121,6 @@ function getTextFromSelection() {
 const adjustY = 16;
 
 export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
-  /*prettier-ignore*/ console.log("-------------------------------------------------------------------");
-  console.log("0. Render ContentScriptPage");
   const [rectCoords, setRectCoords] = useState({ x: -1, y: -1 });
   const mouseDownCoords = useRef({ x: -1, y: -1 });
   const hiddenRef = useRef(true);
@@ -131,11 +129,9 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
     () => rectCoords.x === -1 && rectCoords.y === -1,
     [rectCoords.x, rectCoords.y],
   );
-  /*prettier-ignore*/ console.log("0.1 [ContentScriptPage.tsx,131] hidden: ", hidden);
 
   useEffect(() => {
     hiddenRef.current = hidden;
-    /*prettier-ignore*/ console.log("1. [ContentScriptPage.tsx,135] hiddenRef.current: ", hiddenRef.current);
   }, [hidden]);
 
   useEffect(() => {
@@ -145,15 +141,12 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
     };
 
     const handleMouseUp = (event: MouseEvent) => {
-      /*prettier-ignore*/ console.log("2. [ContentScriptPage.tsx,146] hiddenRef.current;: ", hiddenRef.current);
       if (!hiddenRef.current) return;
 
-      /*prettier-ignore*/ console.log("[ContentScriptPage.tsx,133] event: ", event);
       let { x, y } = mouseDownCoords.current;
       const sameX = x === event.clientX;
       const sameY = y === event.clientY;
       const isSame = sameX && sameY;
-      /*prettier-ignore*/ console.log("[ContentScriptPage.tsx,152] isSame: ", isSame);
       //if (isSame) {
       //  setRectCoords({ x: -1, y: -1 });
       //  return;
@@ -166,7 +159,6 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
         x: ax,
         y: ay,
       };
-      /*prettier-ignore*/ console.log("[ContentScriptPage.tsx,168] coords: ", coords);
       setRectCoords(coords);
     };
 

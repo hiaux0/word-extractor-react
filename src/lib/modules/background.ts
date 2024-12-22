@@ -2,47 +2,43 @@ import { Browser } from "@/domain/types/types";
 import { CRUDService } from "../CRUDService";
 import { localStorageService } from "../PersistanceService";
 import { backgroundCommunicationService } from "../BackgroundCommunicationService";
-import { browserMessageStorageService } from "../BrowserMessageStorageService";
 
 // Usage example
 
-console.log("0. Extension background script is active.");
+console.log("[B][ ] 0. Extension background script is active.");
 
 export declare var browser: Browser & typeof globalThis;
 
 backgroundCommunicationService.initListeners();
 
-browserMessageStorageService.openDatabase().then(async (db) => {
-  /*prettier-ignore*/ console.log("[background.ts,13] db: ", db);
-});
 
 browser.contextMenus.create({
   id: "collect-image",
   title: "Add to the collected images 2",
 });
 
-browser.browserAction.onClicked.addListener(() => {
-  /*prettier-ignore*/ console.log("[background.ts,28] addListener: ", );
-  browser.tabs.create({ url: "dist/index.html" });
-
-  browserMessageStorageService
-    .openDatabase()
-    .then((db) => {
-      /*prettier-ignore*/ console.log("[background.ts,31] db: ", db);
-      //const data = { id: 1, name: "John Doe", preferences: { theme: "dark" } };
-      //return saveData(db, data);
-    })
-    .then(() => browserMessageStorageService.openDatabase())
-    .then(() => browserMessageStorageService.get())
-    .then((data) => {
-      console.log("Retrieved data:", data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-
-  console.log("Extension background script is active.");
-});
+//browser.browserAction.onClicked.addListener(() => {
+//  /*prettier-ignore*/ console.log("[background.ts,28] addListener: ", );
+//  // browser.tabs.create({ url: "dist/index.html" });
+//
+//  browserMessageStorageService
+//    .openDatabase()
+//    .then((db) => {
+//      /*prettier-ignore*/ console.log("[background.ts,31] db: ", db);
+//      //const data = { id: 1, name: "John Doe", preferences: { theme: "dark" } };
+//      //return saveData(db, data);
+//    })
+//    .then(() => browserMessageStorageService.openDatabase())
+//    .then(() => browserMessageStorageService.get())
+//    .then((data) => {
+//      console.log("Retrieved data:", data);
+//    })
+//    .catch((error) => {
+//      console.error("Error:", error);
+//    });
+//
+//  console.log("Extension background script is active.");
+//});
 
 // const sharedDatabase = new CRUDService();
 //browser.runtime.onMessage.addListener((message, sender, sendResponse) => {

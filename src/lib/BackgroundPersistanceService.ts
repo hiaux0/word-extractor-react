@@ -1,10 +1,12 @@
 import { IPersistanceService } from "./PersistanceService";
 
+const dbKey = "clientData";
+
 let db: IDBDatabase;
-class BrowserMessageStorageService implements IPersistanceService {
+class BackgroundPersistanceService implements IPersistanceService {
   constructor(private key: string) {}
 
-  public openDatabase() {
+  public openDatabase(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(this.key, 1);
 
@@ -12,9 +14,11 @@ class BrowserMessageStorageService implements IPersistanceService {
         const target = event.target as IDBOpenDBRequest | null;
         if (!target) return;
         db = target.result;
-        /*prettier-ignore*/ console.log("[BrowserMessageStorageService.ts,16] this: ", this);
         if (!db.objectStoreNames.contains("dataStore")) {
-          db.createObjectStore("dataStore", { keyPath: "id" });
+          db.createObjectStore("dataStore", {
+            // keyPath: "id",
+            autoIncrement: true,
+          });
         }
       };
 
@@ -32,11 +36,23 @@ class BrowserMessageStorageService implements IPersistanceService {
     });
   }
 
+  public async getDatabase(): Promise<IDBDatabase> {
+    if (db) return db;
+    const openedDb = await this.openDatabase();
+    return openedDb;
+  }
+
   public get() {
-    return new Promise((resolve, reject) => {
-      const transaction = db.transaction("dataStore", "readonly");
+    return new Promise(async (resolve, reject) => {
+      // TODO: db is undefined
+      const ensuredDb = await this.getDatabase();
+      const transaction = ensuredDb.transaction("dataStore", "readwrite");
       const store = transaction.objectStore("dataStore");
-      const request = store.get(1); // Get data with key `1`
+      /*prettier-ignore*/ console.log("G GET [BackgroundPersistanceService.ts,50] store: ", store);
+      store.getAll().onsuccess = function (event: any) {
+        console.log("DDD Data:", event.target.result);
+      };
+      const request = store.get(dbKey); // Get data with key `1`
 
       request.onsuccess = function (event: any) {
         resolve(event.target.result);
@@ -49,11 +65,11 @@ class BrowserMessageStorageService implements IPersistanceService {
   }
 
   public set = (data: any) => {
-    return new Promise((resolve, reject) => {
-      if (!db) return;
-      const transaction = db.transaction("dataStore", "readwrite");
+    return new Promise(async (resolve, reject) => {
+      const ensuredDb = await this.getDatabase();
+      const transaction = ensuredDb.transaction("dataStore", "readwrite");
       const store = transaction.objectStore("dataStore");
-      store.put(data);
+      store.put(data, dbKey);
 
       transaction.oncomplete = function () {
         resolve("Data saved successfully.");
@@ -66,6 +82,6 @@ class BrowserMessageStorageService implements IPersistanceService {
   };
 }
 
-export const browserMessageStorageService = new BrowserMessageStorageService(
+export const backgroundPersistanceService = new BackgroundPersistanceService(
   "[WE]storage-message",
 );
