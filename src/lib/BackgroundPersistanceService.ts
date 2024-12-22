@@ -48,9 +48,9 @@ class BackgroundPersistanceService implements IPersistanceService {
       const ensuredDb = await this.getDatabase();
       const transaction = ensuredDb.transaction("dataStore", "readwrite");
       const store = transaction.objectStore("dataStore");
-      /*prettier-ignore*/ console.log("G GET [BackgroundPersistanceService.ts,50] store: ", store);
+      /*prettier-ignore*/ console.log("[B][ ] G GET [BackgroundPersistanceService.ts,50] store: ", store);
       store.getAll().onsuccess = function (event: any) {
-        console.log("DDD Data:", event.target.result);
+        console.log("[B][ ] DDD Data:", event.target.result);
       };
       const request = store.get(dbKey); // Get data with key `1`
 
@@ -66,6 +66,7 @@ class BackgroundPersistanceService implements IPersistanceService {
 
   public set = (data: any) => {
     return new Promise(async (resolve, reject) => {
+      /*prettier-ignore*/ console.log("[B][ ] S SET [BackgroundPersistanceService.ts,69] data: ", data);
       const ensuredDb = await this.getDatabase();
       const transaction = ensuredDb.transaction("dataStore", "readwrite");
       const store = transaction.objectStore("dataStore");

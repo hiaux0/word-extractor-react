@@ -38,7 +38,7 @@ export class BackgroundCommunicationService implements ICommunicationService {
       browser.tabs.create({ url: "dist/index.html" });
 
       const data = await backgroundPersistanceService.get();
-      /*prettier-ignore*/ console.log("[BackgroundCommunicationService.ts,41] data: ", data);
+      /*prettier-ignore*/ console.log("[B][ ] [BackgroundCommunicationService.ts,41] data: ", data);
     });
   }
 
