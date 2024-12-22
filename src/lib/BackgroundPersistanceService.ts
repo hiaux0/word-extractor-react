@@ -66,7 +66,7 @@ class BackgroundPersistanceService implements IPersistanceService {
 
   public set = (data: any) => {
     return new Promise(async (resolve, reject) => {
-      /*prettier-ignore*/ console.trace("[B][ ] S SET [BackgroundPersistanceService.ts,69] data: ", data);
+      /*prettier-ignore*/ console.log("[B][ ] S SET [BackgroundPersistanceService.ts,69] data: ", data);
       const ensuredDb = await this.getDatabase();
       const transaction = ensuredDb.transaction("dataStore", "readwrite");
       const store = transaction.objectStore("dataStore");

@@ -23,10 +23,10 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
   useEffect(() => {
     if (!loaded) {
       if (words.length === 0) {
-        if (isBrowserAction) return;
+        if (isBrowserAction) return setLoaded(true);
         const loadedWords = localStorageService.get();
         /*prettier-ignore*/ console.log("[ ][C] Loaded words from localStorage", loadedWords);
-        if (loadedWords.length === 0) return;
+        if (loadedWords.length === 0) return setLoaded(true);
         /*prettier-ignore*/ console.log("[ ][C] Sending loaded words to [CS] from [PW]");
         contentScriptCommunicationService.send({
           payload: loadedWords,
@@ -37,13 +37,14 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
 
       setLoaded(true);
     } else {
-      if (isBrowserAction) return;
+      if (isBrowserAction) return setLoaded(true);
       /*prettier-ignore*/ console.log("[ ][C] Setting words to localStorage", words);
       localStorageService.set(words);
       contentScriptCommunicationService.send({
         payload: words,
         action: MESSAGES["database:sync"],
       });
+      setLoaded(true);
     }
   }, [words]);
 

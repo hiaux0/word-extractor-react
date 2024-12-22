@@ -9,6 +9,7 @@ export class BackgroundCommunicationService implements ICommunicationService {
   private port: IConnection;
 
   constructor() {
+    console.log("[B][ ] Background constructor");
     const connected = (p: IConnection) => {
       this.port = p;
       //this.port.postMessage({
@@ -17,6 +18,7 @@ export class BackgroundCommunicationService implements ICommunicationService {
       this.port.onMessage.addListener((m: IMessagePayload) => {
         switch (m.action) {
           case MESSAGES["database:sync"]: {
+            console.log("[B][ ] Background message, so persist");
             backgroundPersistanceService.set(m.payload);
             break;
           }
