@@ -1,5 +1,4 @@
 import { Browser } from "@/domain/types/types";
-import { contentScriptCommunicationService } from "../CommunicationService";
 
 console.log("0. Extension content script is active.");
 
@@ -18,5 +17,3 @@ if (!document.getElementById("root")) {
 }
 
 export declare var browser: Browser & typeof globalThis;
-
-contentScriptCommunicationService.initListeners();

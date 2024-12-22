@@ -16,6 +16,11 @@ export default defineConfig({
     // browser: "browser",
   },
   build: {
+    minify: false,
+    terserOptions: {
+      compress: false,
+      mangle: false,
+    },
     outDir: "extension/background",
     rollupOptions: {
       input: {

@@ -5,6 +5,11 @@ export interface ISelectItem {
   label: string;
 }
 
+export interface IMessagePayload {
+  action: string;
+  payload: any;
+}
+
 export interface IConnection {
   postMessage: (message: any) => void;
   onMessage: {
@@ -26,7 +31,7 @@ export interface Browser {
     connect: (options: { name: string }) => IConnection;
     onConnect: {
       addListener: (callback: (port: IConnection) => void) => void;
-    },
+    };
     onMessage: {
       addListener: (
         callback: (

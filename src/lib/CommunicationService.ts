@@ -1,20 +1,13 @@
-import { Browser, IConnection } from "@/domain/types/types";
+import { Browser, IConnection, IMessagePayload } from "@/domain/types/types";
 
 export declare var browser: Browser & typeof globalThis;
 
-interface IMessagePayload {
-  action: string;
-  payload: any;
-}
-
-interface ICommunicationService {
+export interface ICommunicationService {
   initListeners: () => void;
   send: (data: IMessagePayload) => void;
 }
 
-export class ContentScriptCommunicationService
-  implements ICommunicationService
-{
+class ContentScriptCommunicationService implements ICommunicationService {
   private port: IConnection;
 
   constructor(key?: string) {
@@ -47,39 +40,5 @@ export class ContentScriptCommunicationService
   }
 }
 
-export class BackgroundCommunicationService implements ICommunicationService {
-  private port: IConnection;
-
-  constructor() {
-    const connected = (p: IConnection) => {
-      this.port = p;
-      this.port.postMessage({
-        greeting: "[B1 Background] hi there content script!",
-      });
-      this.port.onMessage.addListener((m) => {
-        this.port.postMessage({
-          greeting: `[B2 Background] In background script, received message from content script: \n      ${m.greeting}`,
-        });
-      });
-    };
-
-    browser.runtime.onConnect.addListener(connected);
-  }
-
-  public initListeners() {
-    browser.browserAction.onClicked.addListener(() => {
-      this.port.postMessage({
-        greeting: "[B3 Background] they clicked the button!",
-      });
-    });
-  }
-
-  public send(data: IMessagePayload) {
-    this.port.postMessage(data);
-  }
-}
-
 export const contentScriptCommunicationService =
   new ContentScriptCommunicationService();
-export const backgroundCommunicationService =
-  new BackgroundCommunicationService();

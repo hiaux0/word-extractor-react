@@ -1,10 +1,8 @@
 import { Browser } from "@/domain/types/types";
 import { CRUDService } from "../CRUDService";
-import {
-  browserMessageStorageService,
-  localStorageService,
-} from "../PersistanceService";
-import { backgroundCommunicationService } from "../CommunicationService";
+import { localStorageService } from "../PersistanceService";
+import { backgroundCommunicationService } from "../BackgroundCommunicationService";
+import { browserMessageStorageService } from "../BrowserMessageStorageService";
 
 // Usage example
 
@@ -30,7 +28,7 @@ browser.browserAction.onClicked.addListener(() => {
   browserMessageStorageService
     .openDatabase()
     .then((db) => {
-      /*prettier-ignore*/ console.log("[CommunicationService.ts,59] db: ", db);
+      /*prettier-ignore*/ console.log("[background.ts,31] db: ", db);
       //const data = { id: 1, name: "John Doe", preferences: { theme: "dark" } };
       //return saveData(db, data);
     })

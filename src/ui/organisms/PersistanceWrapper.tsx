@@ -3,7 +3,8 @@ import { ComponentProps, FC, useEffect, useState } from "react";
 import { localStorageService } from "@/lib/PersistanceService";
 import { wordsDatabaseAtom } from "@/lib/StateAtom";
 import { contentScriptCommunicationService } from "@/lib/CommunicationService";
-import { MESSAGES } from "@/lib/common/constants";
+
+contentScriptCommunicationService.initListeners();
 
 interface PersistanceProps extends ComponentProps<any> {
   children: React.ReactNode;
@@ -22,7 +23,7 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
         /*prettier-ignore*/ console.log("1. [PersistanceWrapper.tsx,21] loadedWords: ", loadedWords);
         contentScriptCommunicationService.send({
           payload: loadedWords,
-          action: MESSAGES["database:sync"],
+          action: "database:sync",
         });
         setWords(loadedWords);
       }
