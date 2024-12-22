@@ -1,55 +1,85 @@
-// @ts-nocheck
+import { Browser, IConnection } from "@/domain/types/types";
 
-export function openDatabase() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open("MyExtensionDB", 1);
+export declare var browser: Browser & typeof globalThis;
 
-    request.onupgradeneeded = function (event) {
-      const db = event.target.result;
-      if (!db.objectStoreNames.contains("dataStore")) {
-        db.createObjectStore("dataStore", { keyPath: "id" });
-      }
-    };
-
-    request.onsuccess = function (event) {
-      resolve(event.target.result);
-    };
-
-    request.onerror = function (event) {
-      reject(event.target.error);
-    };
-  });
+interface IMessagePayload {
+  action: string;
+  payload: any;
 }
 
-export function saveData(db, data) {
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction("dataStore", "readwrite");
-    const store = transaction.objectStore("dataStore");
-    store.put(data);
-
-    transaction.oncomplete = function () {
-      resolve("Data saved successfully.");
-    };
-
-    transaction.onerror = function (event) {
-      reject("Error saving data: " + event.target.error);
-    };
-  });
+interface ICommunicationService {
+  initListeners: () => void;
+  send: (data: IMessagePayload) => void;
 }
 
-export function getData(db) {
-  return new Promise((resolve, reject) => {
-    const transaction = db.transaction("dataStore", "readonly");
-    const store = transaction.objectStore("dataStore");
-    const request = store.get(1); // Get data with key `1`
+export class ContentScriptCommunicationService
+  implements ICommunicationService
+{
+  private port: IConnection;
 
-    request.onsuccess = function (event) {
-      resolve(event.target.result);
-    };
+  constructor(key?: string) {
+    let myPort = browser.runtime.connect({ name: "port-from-cs" });
+    this.port = myPort;
+  }
 
-    request.onerror = function (event) {
-      reject("Error retrieving data: " + event.target.error);
-    };
-  });
+  public initListeners() {
+    this.port.postMessage({
+      greeting: "[A1 Content] hello from content script",
+    });
+
+    this.port.onMessage.addListener((m) => {
+      console.log(
+        "[A2 Content] In content script, received message from background script: ",
+      );
+      console.log("  ", m.greeting);
+    });
+
+    document.body.addEventListener("click", () => {
+      this.port.postMessage({
+        greeting: "[A3 Content] they clicked the page!",
+      });
+    });
+  }
+
+  public send(data: IMessagePayload) {
+    /*prettier-ignore*/ console.log("[CommunicationService.ts,46] this.port: ", this.port);
+    this.port.postMessage(data);
+  }
 }
 
+export class BackgroundCommunicationService implements ICommunicationService {
+  private port: IConnection;
+
+  constructor() {
+    const connected = (p: IConnection) => {
+      this.port = p;
+      this.port.postMessage({
+        greeting: "[B1 Background] hi there content script!",
+      });
+      this.port.onMessage.addListener((m) => {
+        this.port.postMessage({
+          greeting: `[B2 Background] In background script, received message from content script: \n      ${m.greeting}`,
+        });
+      });
+    };
+
+    browser.runtime.onConnect.addListener(connected);
+  }
+
+  public initListeners() {
+    browser.browserAction.onClicked.addListener(() => {
+      this.port.postMessage({
+        greeting: "[B3 Background] they clicked the button!",
+      });
+    });
+  }
+
+  public send(data: IMessagePayload) {
+    this.port.postMessage(data);
+  }
+}
+
+export const contentScriptCommunicationService =
+  new ContentScriptCommunicationService();
+export const backgroundCommunicationService =
+  new BackgroundCommunicationService();
