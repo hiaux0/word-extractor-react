@@ -16,7 +16,7 @@ export default defineConfig({
     // browser: "browser",
   },
   build: {
-    outDir: "extension",
+    outDir: "extension/content",
     rollupOptions: {
       input: {
         contentScript: fileURLToPath(
@@ -28,7 +28,7 @@ export default defineConfig({
           return assetInfo.names[0];
         },
         entryFileNames: (_entryInfo) => {
-          return "content/[name].js";
+          return "[name].js";
         },
       },
     },
