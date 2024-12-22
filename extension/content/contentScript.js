@@ -1,1 +1,0 @@
-console.log(">>>>>>>>>>>>>>>>>>>> content-script.ts");const o=document.getElementById("root");if(!o){const t=document.createElement("div");t.id="root",t.dataset.isContent="true",t.style.position="absolute",t.style.top="0",t.style.left="0",document.body.appendChild(t)}console.log("Extension content script is active.");
