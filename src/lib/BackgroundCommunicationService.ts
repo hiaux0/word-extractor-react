@@ -1,6 +1,7 @@
 import { Browser, IConnection, IMessagePayload } from "@/domain/types/types";
 import { ICommunicationService } from "./CommunicationService";
 import { backgroundPersistanceService } from "./BackgroundPersistanceService";
+import { MESSAGES } from "./common/constants";
 
 export declare var browser: Browser & typeof globalThis;
 
@@ -15,7 +16,7 @@ export class BackgroundCommunicationService implements ICommunicationService {
       //});
       this.port.onMessage.addListener((m: IMessagePayload) => {
         switch (m.action) {
-          case "database:sync": {
+          case MESSAGES["database:sync"]: {
             backgroundPersistanceService.set(m.payload);
             break;
           }
