@@ -2,8 +2,8 @@ import { ComponentProps, FC } from "react";
 import { AddTranslationCard } from "../organisms/AddTranslationCard";
 import { Combobox } from "../organisms/Combobox/Combobox";
 import LanguageTracker from "@/components/language-tracker";
-import { Provider } from "jotai";
 import { DataTableDemo } from "../organisms/DataTable/DataTableDemo";
+import { AppSidebarDemo } from "../organisms/AppSidebar/AppSidebarDemo";
 
 interface DemoPageProps extends ComponentProps<any> {}
 
@@ -11,6 +11,9 @@ export const DemoPage: FC<DemoPageProps> = (props) => {
   const { style } = props;
   return (
     <div>
+      <h1>AppSidebarDemo</h1>
+      <AppSidebarDemo />
+      <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr />
       <h1>DataTableDemo</h1>
       <DataTableDemo />
       <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr />

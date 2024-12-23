@@ -4,11 +4,14 @@ import { App } from "./App";
 import "./index.css";
 import { Provider } from "jotai";
 import { PersistanceWrapper } from "./ui/organisms/PersistanceWrapper";
+import { SidebarProvider } from "./components/ui/sidebar";
 
 createRoot(document.getElementById("root")!).render(
   <Provider>
     <PersistanceWrapper>
-      <App root={document.getElementById("root")} />
+      <SidebarProvider>
+        <App root={document.getElementById("root")} />
+      </SidebarProvider>
     </PersistanceWrapper>
   </Provider>,
 );
