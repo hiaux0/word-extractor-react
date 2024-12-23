@@ -16,7 +16,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
@@ -25,9 +24,14 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { ChevronDown, ChevronUp, Plus, User2 } from "lucide-react";
+import { sheetsAtom } from "@/lib/StateAtom";
+import { CreateSheetPopover } from "@/ui/molecules/CreateSheetPopover/CreateSheetPopover";
+import { useAtom } from "jotai";
+import { ChevronDown, ChevronUp, User2 } from "lucide-react";
 
 export function AppSidebar() {
+  const [sheets, setSheets] = useAtom(sheetsAtom);
+
   const recentlyUsed = [
     "English new words",
     "Tri thuc nhan loai",
@@ -35,16 +39,11 @@ export function AppSidebar() {
   ];
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar >
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem className="flex">
-            <Button
-              /* onClick={addNewEntry}*/ className="flex flex-grow justify-between"
-            >
-              New sheet
-              <Plus className="w-4 h-4 mr-2" />
-            </Button>
+            <CreateSheetPopover />
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
@@ -88,11 +87,11 @@ export function AppSidebar() {
                   <Input type="text" placeholder="Find sheets..." />
                 </SidebarMenuItem>
 
-                {recentlyUsed.map((item) => (
-                  <SidebarMenuItem key={item}>
+                {sheets.map((item) => (
+                  <SidebarMenuItem key={item.id}>
                     <SidebarMenuButton asChild>
-                      <a href={item}>
-                        <span>{item}</span>
+                      <a href={item.id}>
+                        <span>{item.name}</span>
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

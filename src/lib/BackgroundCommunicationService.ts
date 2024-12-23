@@ -47,7 +47,7 @@ export class BackgroundCommunicationService implements ICommunicationService {
     });
   }
 
-  public send(data: IMessagePayload) {
+  public send<T>(data: IMessagePayload<T>) {
     this.port.postMessage(data);
   }
 }

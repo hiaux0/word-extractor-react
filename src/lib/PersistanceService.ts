@@ -1,22 +1,24 @@
-import { AnyObject } from "@/domain/types/types";
+import { AnyObject, IDatabase } from "@/domain/types/types";
 
-export interface IPersistanceService {
-  get: () => string[] | AnyObject;
+export interface IPersistanceService<T> {
+  get: () => T | string[] | AnyObject;
   set: (value: string[]) => void;
 }
 
-export class LocalStorageService implements IPersistanceService {
+export class LocalStorageService<T = IDatabase>
+  implements IPersistanceService<T>
+{
   constructor(private key: string) {}
 
-  get = () => {
+  get = (): T => {
     const value = localStorage.getItem(this.key);
-    return value ? JSON.parse(value) : [];
+    return value ? JSON.parse(value) : undefined;
   };
 
   set = (value: any) => {
+    /*prettier-ignore*/ console.log("[PersistanceService.ts,20] this.key: ", this.key);
     localStorage.setItem(this.key, JSON.stringify(value));
   };
 }
-
 
 export const localStorageService = new LocalStorageService("[WE]storage-local");

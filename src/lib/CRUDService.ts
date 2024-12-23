@@ -85,7 +85,7 @@ export class CRUDService<T extends AnyObject> {
 
   /** READ */
 
-  public readAll(deepClone?: boolean): T[] {
+  public readAll(deepClone: boolean = true): T[] {
     if (deepClone) {
       return structuredClone(this.items);
     }

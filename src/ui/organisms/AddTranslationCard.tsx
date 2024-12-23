@@ -9,7 +9,11 @@ import { ISelectItem, ISheet, IWordEntry } from "@/domain/types/types";
 import { CRUDService } from "@/lib/CRUDService";
 import { mapSheetToSelectItem } from "@/lib/UserDefinedMappingService";
 import { useAtom } from "jotai";
-import { wordsDatabaseAtom } from "@/lib/StateAtom";
+import {
+  sheetsCRUDService,
+  wordsCRUDService,
+  wordsListAtom,
+} from "@/lib/StateAtom";
 
 const frameworks: ISelectItem[] = [
   {
@@ -34,12 +38,8 @@ const frameworks: ISelectItem[] = [
   },
 ];
 
-// const dbMap = new CRUDMapService<IWordEntry>();
-const sheetsDatabase = new CRUDService<ISheet>();
-const wordsDatabase = new CRUDService<IWordEntry>();
-
 export function AddTranslationCard() {
-  const [words, setWords] = useAtom(wordsDatabaseAtom);
+  const [words, setWords] = useAtom(wordsListAtom);
 
   const [inputSheet, selectInputSheet] = useState(frameworks[0]);
   const [translation, addTranslation] = useState("");
@@ -49,8 +49,8 @@ export function AddTranslationCard() {
   const createTranslation = useCallback(() => {
     /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,50] createTranslation: ", );
     const source = window.location.href;
-    wordsDatabase.replace(words);
-    wordsDatabase.create({
+    wordsCRUDService.replace(words);
+    wordsCRUDService.create({
       sheets: [inputSheet.value],
       text: "todo: selected",
       //translation,
@@ -60,14 +60,14 @@ export function AddTranslationCard() {
       source,
     });
 
-    const updated = wordsDatabase.readAll(true);
+    const updated = wordsCRUDService.readAll(true);
     setWords(updated);
   }, [inputSheet, translation, comment]);
 
   const addNewSheet = useCallback((newItem: string) => {
-    const created = sheetsDatabase.create({ name: newItem });
+    const created = sheetsCRUDService.create({ name: newItem });
     if (!created) return;
-    const updated = sheetsDatabase.readAll();
+    const updated = sheetsCRUDService.readAll();
 
     const mapped = mapSheetToSelectItem(created);
     const mappedArray = updated.map(mapSheetToSelectItem);
@@ -96,7 +96,6 @@ export function AddTranslationCard() {
               <Input
                 id="name"
                 onChange={(event) => addTranslation(event.target.value)}
-                autoFocus
               />
             </div>
             <div className="flex flex-col space-y-1.5">

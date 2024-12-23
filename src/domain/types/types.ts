@@ -5,9 +5,9 @@ export interface ISelectItem {
   label: string;
 }
 
-export interface IMessagePayload {
+export interface IMessagePayload<T = IDatabase> {
   action: string;
-  payload: any;
+  payload: T;
 }
 
 export interface IConnection {
@@ -57,6 +57,7 @@ export interface IWordEntry {
   source: string;
   sheets: string[];
 }
+
 export const defaultWordEntry: IWordEntry = {
   id: "",
   text: "test",
@@ -70,9 +71,13 @@ export interface ISheet {
   id: string;
   name: string;
 }
+export const defaultSheet: ISheet = {
+  id: "",
+  name: "",
+};
 
 export interface IDatabase {
-  sheetsMap: Record<string, IWordEntry[]>;
+  sheetsMap?: Record<string, IWordEntry[]>;
   words: IWordEntry[];
-  sheets: string[];
+  sheets: ISheet[];
 }

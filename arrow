@@ -12,3 +12,4 @@ src/lib/StateService.ts
 src/lib/CommunicationService.ts
 src/lib/PersistanceService.ts
 src/ui/organisms/AppSidebar/AppSidebar.tsx
+src/ui/molecules/CreateSheetPopover/CreateSheetPopover.tsx

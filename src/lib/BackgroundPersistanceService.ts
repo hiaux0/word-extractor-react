@@ -1,3 +1,4 @@
+import { IDatabase } from "@/domain/types/types";
 import { IPersistanceService } from "./PersistanceService";
 
 const dbKey = "clientData";
@@ -42,7 +43,7 @@ class BackgroundPersistanceService implements IPersistanceService {
     return openedDb;
   }
 
-  public get<T = any>(): Promise<T> {
+  public get<T = IDatabase>(): Promise<T> {
     return new Promise(async (resolve, reject) => {
       // TODO: db is undefined
       const ensuredDb = await this.getDatabase();

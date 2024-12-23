@@ -1,8 +1,19 @@
-import { atom } from "jotai";
+import { atom, createStore } from "jotai";
 import { CRUDService } from "./CRUDService";
-import { defaultWordEntry, IWordEntry } from "@/domain/types/types";
+import {
+  defaultSheet,
+  defaultWordEntry,
+  IDatabase,
+  ISheet,
+  IWordEntry,
+} from "@/domain/types/types";
 
-const wordsDatabase = new CRUDService<IWordEntry>([
+const store = createStore();
+
+const countAtom = atom(0);
+store.set(countAtom, 1);
+
+export const wordsCRUDService = new CRUDService<IWordEntry>([
   //{
   //  id: "7aa69924",
   //  sheets: ["next.js"],
@@ -22,6 +33,11 @@ const wordsDatabase = new CRUDService<IWordEntry>([
   //    "file:///home/mine/dev/projects/word-extractor-react/src/ui/playground/playground.html",
   //},
 ]);
-wordsDatabase.setDefault(defaultWordEntry);
-const arr = wordsDatabase.readAll();
-export const wordsDatabaseAtom = atom(arr);
+wordsCRUDService.setDefault(defaultWordEntry);
+const arr = wordsCRUDService.readAll();
+
+export const wordsListAtom = atom(arr);
+
+export const sheetsCRUDService = new CRUDService<ISheet>([]);
+sheetsCRUDService.setDefault(defaultSheet);
+export const sheetsAtom = atom<ISheet[]>([]);

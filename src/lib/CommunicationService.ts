@@ -49,6 +49,7 @@ class ContentScriptCommunicationService implements ICommunicationService {
   }
 
   public send(data: IMessagePayload) {
+    if (!this.port) return
     /*prettier-ignore*/ console.log("[ ][C] Sending message from [CS]", data);
     this.port.postMessage(data);
     // this.port.postMessage(JSON.stringify(data));

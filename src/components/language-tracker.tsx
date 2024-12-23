@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import { CRUDService } from "@/lib/CRUDService";
 import { defaultWordEntry, IWordEntry } from "@/domain/types/types";
 import { useAtom } from "jotai";
-import { wordsDatabaseAtom } from "@/lib/StateAtom";
+import { wordsListAtom } from "@/lib/StateAtom";
 import { backgroundCommunicationService } from "@/lib/BackgroundCommunicationService";
 import { MESSAGES } from "@/lib/common/constants";
 import { AppSidebar } from "@/ui/organisms/AppSidebar/AppSidebar";
@@ -25,7 +25,7 @@ import { SidebarTrigger } from "./ui/sidebar";
 const sharedDatabase = new CRUDService<IWordEntry>();
 
 export default function LanguageTracker() {
-  const [entries, setEntries] = useAtom(wordsDatabaseAtom);
+  const [entries, setEntries] = useAtom(wordsListAtom);
   const [searchTerm, setSearchTerm] = useState("");
   const { theme, setTheme } = useTheme();
 
