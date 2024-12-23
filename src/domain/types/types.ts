@@ -59,10 +59,10 @@ export interface IWordEntry {
 }
 export const defaultWordEntry: IWordEntry = {
   id: "",
-  text: "",
-  translation: "",
-  comment: "",
-  source: "",
+  text: "test",
+  translation: "test",
+  comment: "test",
+  source: "test",
   sheets: [],
 };
 

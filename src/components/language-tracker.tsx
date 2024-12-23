@@ -17,6 +17,8 @@ import { CRUDService } from "@/lib/CRUDService";
 import { defaultWordEntry, IWordEntry } from "@/domain/types/types";
 import { useAtom } from "jotai";
 import { wordsDatabaseAtom } from "@/lib/StateAtom";
+import { backgroundCommunicationService } from "@/lib/BackgroundCommunicationService";
+import { MESSAGES } from "@/lib/common/constants";
 
 const sharedDatabase = new CRUDService<IWordEntry>();
 
@@ -37,6 +39,10 @@ export default function LanguageTracker() {
     const updatedEntries = [...entries, newEntry];
     setEntries(updatedEntries);
     saveEntriesToDatabase(updatedEntries);
+    backgroundCommunicationService.send({
+      action: MESSAGES["database:create"],
+      payload: newEntry,
+    });
   };
 
   const updateEntry = (id: string, field: keyof IWordEntry, value: string) => {

@@ -27,9 +27,11 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
       if (words.length === 0) {
         if (isBrowserAction) {
           backgroundPersistanceService.get<IWordEntry[]>().then((data) => {
+            setLoaded(true);
+            if (!data) return;
             setWords(data);
           });
-          return setLoaded(true);
+          return;
         }
 
         const loadedWords = localStorageService.get();
