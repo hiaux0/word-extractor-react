@@ -4,6 +4,7 @@ import { Combobox } from "../organisms/Combobox/Combobox";
 import LanguageTracker from "@/components/language-tracker";
 import { DataTableDemo } from "../organisms/DataTable/DataTableDemo";
 import { AppSidebarDemo } from "../organisms/AppSidebar/AppSidebarDemo";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 interface DemoPageProps extends ComponentProps<any> {}
 
@@ -11,7 +12,10 @@ export const DemoPage: FC<DemoPageProps> = (props) => {
   const { style } = props;
   return (
     <div>
-      <h1>AppSidebarDemo</h1>
+      <div style={{ display: "flex" }}>
+        <h1>AppSidebarDemo</h1>
+        <SidebarTrigger />
+      </div>
       <AppSidebarDemo />
       <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr />
       <h1>DataTableDemo</h1>

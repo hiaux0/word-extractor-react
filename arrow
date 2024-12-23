@@ -9,3 +9,6 @@ src/ui/organisms/AddTranslationCard.tsx
 src/components/language-tracker.tsx
 src/lib/modules/background.ts
 src/lib/StateService.ts
+src/lib/CommunicationService.ts
+src/lib/PersistanceService.ts
+src/ui/organisms/AppSidebar/AppSidebar.tsx
