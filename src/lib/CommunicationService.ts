@@ -12,15 +12,17 @@ class ContentScriptCommunicationService implements ICommunicationService {
   private port: IConnection;
 
   constructor(key?: string) {
-    let myPort = browser.runtime.connect({ name: "port-from-cs" });
-    this.port = myPort;
+    try {
+      let myPort = browser.runtime.connect({ name: "port-from-cs" });
+      this.port = myPort;
+    } catch {}
   }
 
   public initListeners() {
     //this.port.postMessage({
     //  greeting: "[A1 Content] hello from content script",
     //});
-
+    if (!this.port) return;
     this.port.onMessage.addListener((m) => {
       switch (m.action) {
         case MESSAGES["database:create"]: {

@@ -33,7 +33,9 @@ export class BackgroundCommunicationService implements ICommunicationService {
       });
     };
 
-    browser.runtime.onConnect.addListener(connected);
+    try {
+      browser.runtime.onConnect.addListener(connected);
+    } catch {}
   }
 
   public initListeners() {
