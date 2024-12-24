@@ -129,11 +129,9 @@ export function AppSidebar() {
                     <SidebarMenuButton asChild>
                       <span
                         onClick={() => selectSheet(item.id)}
-                        className={cn(
-                          "cursor-pointer",
-                          isSelected(item.id) &&
-                            "bg-zinc-200 hover:bg-zinc-200",
-                        )}
+                        className={cn("cursor-pointer", {
+                          "bg-zinc-200 hover:bg-zinc-200": isSelected(item.id),
+                        })}
                       >
                         {item.name}
                       </span>
@@ -146,7 +144,7 @@ export function AppSidebar() {
         </Collapsible>
       </SidebarContent>
 
-        <AddTranslationCard/>
+      <AddTranslationCard />
 
       <SidebarFooter>
         <SidebarMenu>

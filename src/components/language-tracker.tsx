@@ -84,6 +84,7 @@ export default function LanguageTracker() {
       Object.entries(word).find(([key, value]) => {
         const denyList = ["id", "sheets"];
         if (denyList.includes(key)) return;
+        if (!value) return;
         const okay = value.toLowerCase().includes(searchTerm.toLowerCase());
         if (okay) {
           included = okay;
