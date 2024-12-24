@@ -28,9 +28,17 @@ import { sheetsAtom } from "@/lib/StateAtom";
 import { CreateSheetPopover } from "@/ui/molecules/CreateSheetPopover/CreateSheetPopover";
 import { useAtom } from "jotai";
 import { ChevronDown, ChevronUp, User2 } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
 
 export function AppSidebar() {
   const [sheets, setSheets] = useAtom(sheetsAtom);
+  const [searchSheet, setSearchSheet] = useState("");
+
+  const filteredSheets = useMemo(() => {
+    return sheets.filter((sheet) =>
+      sheet.name.toLowerCase().includes(searchSheet.toLowerCase()),
+    );
+  }, [sheets, searchSheet]);
 
   const recentlyUsed = [
     "English new words",
@@ -39,7 +47,7 @@ export function AppSidebar() {
   ];
 
   return (
-    <Sidebar >
+    <Sidebar>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem className="flex">
@@ -84,10 +92,14 @@ export function AppSidebar() {
             <CollapsibleContent>
               <SidebarGroupContent>
                 <SidebarMenuItem>
-                  <Input type="text" placeholder="Find sheets..." />
+                  <Input
+                    type="text"
+                    onChange={(e) => setSearchSheet(e.target.value)}
+                    placeholder="Find sheets..."
+                  />
                 </SidebarMenuItem>
 
-                {sheets.map((item) => (
+                {filteredSheets.map((item) => (
                   <SidebarMenuItem key={item.id}>
                     <SidebarMenuButton asChild>
                       <a href={item.id}>

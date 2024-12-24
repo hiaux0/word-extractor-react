@@ -1,4 +1,4 @@
-import { ComponentProps, FC, useCallback } from "react";
+import { ComponentProps, FC, useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,6 +15,8 @@ interface CreateSheetPopoverProps extends ComponentProps<any> {}
 export const CreateSheetPopover: FC<CreateSheetPopoverProps> = (props) => {
   const { style } = props;
   const [_, setSheets] = useAtom(sheetsAtom);
+  const [value, setValue] = useState("");
+  const [open, setOpen] = useState(false);
 
   const createNewSheet = useCallback((name: string) => {
     sheetsCRUDService.create({ name });
@@ -24,7 +26,12 @@ export const CreateSheetPopover: FC<CreateSheetPopoverProps> = (props) => {
   }, []);
 
   return (
-    <Popover>
+    <Popover
+      open={open}
+      onOpenChange={(opened) => {
+        setOpen(opened);
+      }}
+    >
       <PopoverTrigger asChild>
         <Button className="flex flex-grow justify-between">
           New sheet
@@ -50,12 +57,13 @@ export const CreateSheetPopover: FC<CreateSheetPopoverProps> = (props) => {
                 id="width"
                 placeholder="Sheet name"
                 className="h-8"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key !== "Enter") return;
-                  // get the value of the input field
-                  const value = (e.target as any).value;
-                  /*prettier-ignore*/ console.log("[CreateSheetPopover.tsx,57] value: ", value);
                   createNewSheet(value);
+                  setValue("");
+                  setOpen(false);
                 }}
               />
             </div>

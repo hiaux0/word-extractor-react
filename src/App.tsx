@@ -16,7 +16,7 @@ export const App: FC<Props> = (props) => {
   const isContent = root.dataset.isContent === "true";
   const isBrowserAction = root.dataset.isBrowserAction === "true";
 
-  if (isLocalHost) return <AppSidebarExample />;
+  // if (isLocalHost) return <DemoPage />;
 
   return (
     <>
@@ -29,7 +29,6 @@ export const App: FC<Props> = (props) => {
 import React from "react";
 import ComponentA from "./ui/playground/ComponentA";
 import ComponentB from "./ui/playground/ComponentB";
-import { AppSidebarExample } from "./ui/organisms/AppSidebar/AppSidebarExample";
 
 //export const App = () => (
 //  <div>
