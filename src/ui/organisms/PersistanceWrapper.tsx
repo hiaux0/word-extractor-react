@@ -2,6 +2,7 @@ import { useAtom } from "jotai";
 import { ComponentProps, FC, useEffect, useState } from "react";
 import { localStorageService } from "@/lib/PersistanceService";
 import {
+  selectedSheetAtom,
   sheetsAtom,
   sheetsCRUDService,
   wordsCRUDService,
@@ -21,6 +22,7 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
   const { children } = props;
   const [words, setWords] = useAtom(wordsListAtom);
   const [sheets, setSheets] = useAtom(sheetsAtom);
+  const [selectedSheet, setSelectedSheet] = useAtom(selectedSheetAtom);
   const [loaded, setLoaded] = useState(false);
 
   const isBrowserAction =
@@ -56,6 +58,7 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
         wordsCRUDService.replace(loadedWords);
         setSheets(database.sheets);
         sheetsCRUDService.replace(database.sheets);
+        setSelectedSheet(database.selectedSheet ?? database.sheets[0]);
       }
 
       setLoaded(true);
@@ -63,17 +66,18 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
       /*prettier-ignore*/ console.log("-------------------------------------------------------------------");
       if (isBackground) return setLoaded(true);
       /*prettier-ignore*/ console.log("[ ][C] Setting words to localStorage", words);
-      localStorageService.set({ words, sheets });
+      localStorageService.set({ words, sheets, selectedSheet });
       contentScriptCommunicationService.send({
         payload: {
           words,
           sheets,
+          selectedSheet,
         },
         action: MESSAGES["database:sync"],
       });
       setLoaded(true);
     }
-  }, [words, sheets]);
+  }, [words, sheets, selectedSheet]);
 
   if (!loaded) return <>Loading...</>;
   return <>{children}</>;

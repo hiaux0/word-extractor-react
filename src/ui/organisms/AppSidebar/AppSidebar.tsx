@@ -35,11 +35,11 @@ import { CreateSheetPopover } from "@/ui/molecules/CreateSheetPopover/CreateShee
 import { useAtom, useAtomValue } from "jotai";
 import { ChevronDown, ChevronUp, User2 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
+import { AddTranslationCard } from "../AddTranslationCard";
 
 export function AppSidebar() {
   const [sheets, setSheets] = useAtom(sheetsAtom);
   const [selectedSheet, setSelectedSheet] = useAtom(selectedSheetAtom);
-  /*prettier-ignore*/ console.log("[AppSidebar.tsx,36] selectedSheet: ", selectedSheet);
   const [searchSheetValue, setSearchSheetValue] = useState("");
 
   const filteredSheets = useMemo(() => {
@@ -145,6 +145,8 @@ export function AppSidebar() {
           </SidebarGroup>
         </Collapsible>
       </SidebarContent>
+
+        <AddTranslationCard/>
 
       <SidebarFooter>
         <SidebarMenu>

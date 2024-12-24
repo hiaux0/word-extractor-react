@@ -78,11 +78,20 @@ export default function LanguageTracker() {
       entry.sheets.includes(selectedSheet.id),
     );
 
-    const filteredBySearch = filteredBySheet.filter((entry) =>
-      Object.values(entry).some((value) =>
-        value.toLowerCase().includes(searchTerm.toLowerCase()),
-      ),
-    );
+    const filteredBySearch = filteredBySheet.filter((word) => {
+      // search for in properties
+      let included = false;
+      Object.entries(word).find(([key, value]) => {
+        const denyList = ["id", "sheets"];
+        if (denyList.includes(key)) return;
+        const okay = value.toLowerCase().includes(searchTerm.toLowerCase());
+        if (okay) {
+          included = okay;
+        }
+      });
+
+      return included;
+    });
 
     const filtered = filteredBySearch;
 

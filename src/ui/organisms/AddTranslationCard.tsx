@@ -3,55 +3,44 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Combobox } from "./Combobox/Combobox";
 import { ISelectItem, ISheet, IWordEntry } from "@/domain/types/types";
 import { CRUDService } from "@/lib/CRUDService";
 import { mapSheetToSelectItem } from "@/lib/UserDefinedMappingService";
 import { useAtom } from "jotai";
 import {
+  selectedSheetAtom,
+  sheetsAtom,
   sheetsCRUDService,
   wordsCRUDService,
   wordsListAtom,
 } from "@/lib/StateAtom";
 
-const frameworks: ISelectItem[] = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
-
 export function AddTranslationCard() {
   const [words, setWords] = useAtom(wordsListAtom);
 
-  const [inputSheet, selectInputSheet] = useState(frameworks[0]);
+  const [sheets, setSheets] = useAtom(sheetsAtom);
+  const [selectedSheet, setSelectedSheet] = useAtom(selectedSheetAtom);
+  /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,25] selectedSheet: ", selectedSheet);
   const [translation, addTranslation] = useState("");
   const [comment, addComment] = useState("");
-  const [sheets, setSheets] = useState(frameworks);
+
+  const sheetsAsUIItems = useMemo(
+    () => sheets.map(mapSheetToSelectItem),
+    [sheets],
+  );
+  const selectedSheetAsUIItem = useMemo(
+    () => mapSheetToSelectItem(selectedSheet),
+    [selectedSheet],
+  );
 
   const createTranslation = useCallback(() => {
     /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,50] createTranslation: ", );
     const source = window.location.href;
     wordsCRUDService.replace(words);
     wordsCRUDService.create({
-      sheets: [inputSheet.value],
+      sheets: [selectedSheet.id],
       text: "todo: selected",
       //translation,
       //comment,
@@ -62,18 +51,14 @@ export function AddTranslationCard() {
 
     const updated = wordsCRUDService.readAll(true);
     setWords(updated);
-  }, [inputSheet, translation, comment]);
+  }, [selectedSheet, translation, comment]);
 
   const addNewSheet = useCallback((newItem: string) => {
     const created = sheetsCRUDService.create({ name: newItem });
+    /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,57] created: ", created);
     if (!created) return;
     const updated = sheetsCRUDService.readAll();
-
-    const mapped = mapSheetToSelectItem(created);
-    const mappedArray = updated.map(mapSheetToSelectItem);
-
-    if (mapped) selectInputSheet(mapped);
-    setSheets(mappedArray);
+    setSheets(updated);
   }, []);
 
   return (
@@ -84,11 +69,16 @@ export function AddTranslationCard() {
             <div className="flex flex-col space-y-1.5">
               <Label>Input sheet</Label>
               <Combobox
-                items={sheets}
-                activeItem={inputSheet}
+                items={sheetsAsUIItems}
+                activeItem={selectedSheetAsUIItem}
                 placeholder="Select sheet"
                 onAddNewItem={addNewSheet}
-                onSelectItem={selectInputSheet}
+                onSelectItem={(item) => {
+                /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,77] item: ", item);
+                  const found = sheetsCRUDService.readById(item.id);
+                  if (!found) return;
+                  setSelectedSheet(found);
+                }}
               />
             </div>
             <div className="flex flex-col space-y-1.5">

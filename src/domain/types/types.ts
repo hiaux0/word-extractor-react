@@ -1,6 +1,7 @@
 export type AnyObject = Record<PropertyKey, any>;
 
 export interface ISelectItem {
+  id: string;
   value: string;
   label: string;
 }

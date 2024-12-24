@@ -105,6 +105,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
                   key={item.value}
                   value={item.value}
                   onSelect={(currentValue) => {
+                    /*prettier-ignore*/ console.log("[Combobox.tsx,109] items: ", items);
                     setValue(currentValue === value ? "" : currentValue);
                     onSelectItem?.(item);
                     setOpen(false);
