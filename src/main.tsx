@@ -6,8 +6,6 @@ import { Provider } from "jotai";
 import { PersistanceWrapper } from "./ui/organisms/PersistanceWrapper";
 import { SidebarProvider } from "./components/ui/sidebar";
 
-localStorage.removeItem('[WE]storage-local')
-
 createRoot(document.getElementById("root")!).render(
   <Provider>
     <PersistanceWrapper>

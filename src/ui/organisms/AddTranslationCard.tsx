@@ -14,6 +14,7 @@ import {
   wordsCRUDService,
   wordsListAtom,
 } from "@/lib/StateAtom";
+import { getTextFromSelection } from "@/lib/modules/htmlModules";
 
 export function AddTranslationCard() {
   const [words, setWords] = useAtom(wordsListAtom);
@@ -35,9 +36,11 @@ export function AddTranslationCard() {
   const createTranslation = useCallback(() => {
     const source = window.location.href;
     wordsCRUDService.replace(words);
+    const text = getTextFromSelection();
+    /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,40] text: ", text);
     wordsCRUDService.create({
       sheets: [selectedSheet.id],
-      text: "todo: selected",
+      text,
       translation,
       comment,
       //translation: "todo: translation",

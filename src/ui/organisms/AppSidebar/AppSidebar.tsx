@@ -144,8 +144,6 @@ export function AppSidebar() {
         </Collapsible>
       </SidebarContent>
 
-      <AddTranslationCard />
-
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
