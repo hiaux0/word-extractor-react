@@ -7,22 +7,43 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Plus } from "lucide-react";
-import { sheetsAtom, sheetsCRUDService } from "@/lib/StateAtom";
+import {
+  selectedSheetAtom,
+  sheetsAtom,
+  sheetsCRUDService,
+  wordsCRUDService,
+  wordsListAtom,
+} from "@/lib/StateAtom";
 import { useAtom } from "jotai";
+import { DEBUG_FLAGS } from "@/lib/common/appFlags";
+import { generateMockWords } from "@/lib/modules/mockDataGenerator";
 
 interface CreateSheetPopoverProps extends ComponentProps<any> {}
 
 export const CreateSheetPopover: FC<CreateSheetPopoverProps> = (props) => {
   const { style } = props;
   const [_, setSheets] = useAtom(sheetsAtom);
+  const [__, setWords] = useAtom(wordsListAtom);
+  const [___, setSelectedSheet] = useAtom(selectedSheetAtom);
   const [value, setValue] = useState("");
   const [open, setOpen] = useState(false);
 
   const createNewSheet = useCallback((name: string) => {
-    sheetsCRUDService.create({ name });
+    const created = sheetsCRUDService.create({ name });
+    if (!created) return;
     const updated = sheetsCRUDService.readAll();
     /*prettier-ignore*/ console.log("[CreateSheetPopover.tsx,22] updated: ", updated);
+    setSelectedSheet(created);
     setSheets(updated);
+    setValue("");
+    setOpen(false);
+
+    if (DEBUG_FLAGS.addMockData) {
+      const mockWords = generateMockWords(10, created.id);
+      wordsCRUDService.batchCreate(mockWords);
+      const updatedWords = wordsCRUDService.readAll();
+      setWords(updatedWords);
+    }
   }, []);
 
   return (
@@ -62,8 +83,6 @@ export const CreateSheetPopover: FC<CreateSheetPopoverProps> = (props) => {
                 onKeyDown={(e) => {
                   if (e.key !== "Enter") return;
                   createNewSheet(value);
-                  setValue("");
-                  setOpen(false);
                 }}
               />
             </div>

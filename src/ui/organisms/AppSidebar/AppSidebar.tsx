@@ -24,26 +24,50 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { sheetsAtom } from "@/lib/StateAtom";
+import { ISheet } from "@/domain/types/types";
+import {
+  selectedSheetAtom,
+  sheetsAtom,
+  sheetsCRUDService,
+} from "@/lib/StateAtom";
+import { cn } from "@/lib/utils";
 import { CreateSheetPopover } from "@/ui/molecules/CreateSheetPopover/CreateSheetPopover";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { ChevronDown, ChevronUp, User2 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 
 export function AppSidebar() {
   const [sheets, setSheets] = useAtom(sheetsAtom);
-  const [searchSheet, setSearchSheet] = useState("");
+  const [selectedSheet, setSelectedSheet] = useAtom(selectedSheetAtom);
+  /*prettier-ignore*/ console.log("[AppSidebar.tsx,36] selectedSheet: ", selectedSheet);
+  const [searchSheetValue, setSearchSheetValue] = useState("");
 
   const filteredSheets = useMemo(() => {
     return sheets.filter((sheet) =>
-      sheet.name.toLowerCase().includes(searchSheet.toLowerCase()),
+      sheet.name.toLowerCase().includes(searchSheetValue.toLowerCase()),
     );
-  }, [sheets, searchSheet]);
+  }, [sheets, searchSheetValue]);
 
-  const recentlyUsed = [
-    "English new words",
-    "Tri thuc nhan loai",
-    "User research",
+  const selectSheet = useCallback((sheetId: ISheet["id"]) => {
+    const targetSheet = sheetsCRUDService.readById(sheetId);
+    if (!targetSheet) return;
+    setSelectedSheet(targetSheet);
+  }, []);
+
+  const isSelected = useCallback(
+    (sheetId: ISheet["id"]) => {
+      const targetSheet = sheetsCRUDService.readById(sheetId);
+      if (!targetSheet) return false;
+      const is = targetSheet.id === selectedSheet?.id;
+      return is;
+    },
+    [selectedSheet],
+  );
+
+  const recentlyUsed: string[] = [
+    //"English new words",
+    //"Tri thuc nhan loai",
+    //"User research",
   ];
 
   return (
@@ -93,8 +117,9 @@ export function AppSidebar() {
               <SidebarGroupContent>
                 <SidebarMenuItem>
                   <Input
+                    className="mb-2"
                     type="text"
-                    onChange={(e) => setSearchSheet(e.target.value)}
+                    onChange={(e) => setSearchSheetValue(e.target.value)}
                     placeholder="Find sheets..."
                   />
                 </SidebarMenuItem>
@@ -102,9 +127,16 @@ export function AppSidebar() {
                 {filteredSheets.map((item) => (
                   <SidebarMenuItem key={item.id}>
                     <SidebarMenuButton asChild>
-                      <a href={item.id}>
-                        <span>{item.name}</span>
-                      </a>
+                      <span
+                        onClick={() => selectSheet(item.id)}
+                        className={cn(
+                          "cursor-pointer",
+                          isSelected(item.id) &&
+                            "bg-zinc-200 hover:bg-zinc-200",
+                        )}
+                      >
+                        {item.name}
+                      </span>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}

@@ -80,4 +80,5 @@ export interface IDatabase {
   sheetsMap?: Record<string, IWordEntry[]>;
   words: IWordEntry[];
   sheets: ISheet[];
+  selectedSheet: ISheet;
 }

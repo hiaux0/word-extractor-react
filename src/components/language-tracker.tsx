@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Table,
   TableBody,
@@ -15,8 +15,8 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { CRUDService } from "@/lib/CRUDService";
 import { defaultWordEntry, IWordEntry } from "@/domain/types/types";
-import { useAtom } from "jotai";
-import { wordsListAtom } from "@/lib/StateAtom";
+import { useAtom, useAtomValue } from "jotai";
+import { selectedSheetAtom, wordsListAtom } from "@/lib/StateAtom";
 import { backgroundCommunicationService } from "@/lib/BackgroundCommunicationService";
 import { MESSAGES } from "@/lib/common/constants";
 import { AppSidebar } from "@/ui/organisms/AppSidebar/AppSidebar";
@@ -25,7 +25,8 @@ import { SidebarTrigger } from "./ui/sidebar";
 const sharedDatabase = new CRUDService<IWordEntry>();
 
 export default function LanguageTracker() {
-  const [entries, setEntries] = useAtom(wordsListAtom);
+  const [words, setWords] = useAtom(wordsListAtom);
+  const selectedSheet = useAtomValue(selectedSheetAtom);
   const [searchTerm, setSearchTerm] = useState("");
   const { theme, setTheme } = useTheme();
 
@@ -38,8 +39,8 @@ export default function LanguageTracker() {
       ...defaultWordEntry,
       id: Date.now().toString(),
     };
-    const updatedEntries = [...entries, newEntry];
-    setEntries(updatedEntries);
+    const updatedEntries = [...words, newEntry];
+    setWords(updatedEntries);
     saveEntriesToDatabase(updatedEntries);
     backgroundCommunicationService.send({
       action: MESSAGES["database:create"],
@@ -48,21 +49,21 @@ export default function LanguageTracker() {
   };
 
   const updateEntry = (id: string, field: keyof IWordEntry, value: string) => {
-    const updatedEntries = entries.map((entry) =>
+    const updatedEntries = words.map((entry) =>
       entry.id === id ? { ...entry, [field]: value } : entry,
     );
-    setEntries(updatedEntries);
+    setWords(updatedEntries);
     saveEntriesToDatabase(updatedEntries);
   };
 
   const deleteEntry = (id: string) => {
-    const updatedEntries = entries.filter((entry) => entry.id !== id);
-    setEntries(updatedEntries);
+    const updatedEntries = words.filter((entry) => entry.id !== id);
+    setWords(updatedEntries);
     saveEntriesToDatabase(updatedEntries);
   };
 
   const exportData = () => {
-    const dataStr = JSON.stringify(entries, null, 2);
+    const dataStr = JSON.stringify(words, null, 2);
     const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
     const exportFileDefaultName = "language_entries.json";
 
@@ -72,11 +73,21 @@ export default function LanguageTracker() {
     linkElement.click();
   };
 
-  const filteredEntries = entries.filter((entry) =>
-    Object.values(entry).some((value) =>
-      value.toLowerCase().includes(searchTerm.toLowerCase()),
-    ),
-  );
+  const filteredEntries = useMemo(() => {
+    const filteredBySheet = words.filter((entry) =>
+      entry.sheets.includes(selectedSheet.id),
+    );
+
+    const filteredBySearch = filteredBySheet.filter((entry) =>
+      Object.values(entry).some((value) =>
+        value.toLowerCase().includes(searchTerm.toLowerCase()),
+      ),
+    );
+
+    const filtered = filteredBySearch;
+
+    return filtered;
+  }, [words, searchTerm, selectedSheet]);
 
   return (
     <>
@@ -84,8 +95,8 @@ export default function LanguageTracker() {
 
       <div className="space-y-4">
         <section className="flex items-center">
-          <SidebarTrigger className="p-5"/>
-          <h1 className="text-2xl font-bold">Language Tracker</h1>
+          <SidebarTrigger className="p-5" />
+          <h1 className="text-2xl font-bold">{selectedSheet.name}</h1>
         </section>
 
         <section className="p-2">

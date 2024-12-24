@@ -41,3 +41,5 @@ export const wordsListAtom = atom(arr);
 export const sheetsCRUDService = new CRUDService<ISheet>([]);
 sheetsCRUDService.setDefault(defaultSheet);
 export const sheetsAtom = atom<ISheet[]>([]);
+
+export const selectedSheetAtom = atom<ISheet>(defaultSheet);
