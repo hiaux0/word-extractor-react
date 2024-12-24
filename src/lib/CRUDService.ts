@@ -31,6 +31,7 @@ export class CRUDService<T extends AnyObject> {
     // @ts-ignore instantiated
     const finalItem: T = {
       id: generateId(),
+      created: new Date().toISOString(),
       ...this.initialItems,
       ...item,
     };

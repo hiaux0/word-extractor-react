@@ -63,10 +63,9 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
 
       setLoaded(true);
     } else {
-      /*prettier-ignore*/ console.log("-------------------------------------------------------------------");
       if (isBackground) return setLoaded(true);
-      /*prettier-ignore*/ console.log("[ ][C] Setting words to localStorage", words);
-      localStorageService.set({ words, sheets, selectedSheet });
+      const database = { words, sheets, selectedSheet };
+      localStorageService.set(database);
       contentScriptCommunicationService.send({
         payload: {
           words,

@@ -16,7 +16,6 @@ export class LocalStorageService<T = IDatabase>
   };
 
   set = (value: any) => {
-    /*prettier-ignore*/ console.log("[PersistanceService.ts,20] this.key: ", this.key);
     localStorage.setItem(this.key, JSON.stringify(value));
   };
 }

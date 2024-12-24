@@ -16,7 +16,7 @@ export const App: FC<Props> = (props) => {
   const isContent = root.dataset.isContent === "true";
   const isBrowserAction = root.dataset.isBrowserAction === "true";
 
-  // if (isLocalHost) return <DemoPage />;
+  if (DEBUG_FLAGS.showDemo) return <DemoPage />;
 
   return (
     <>
@@ -29,6 +29,7 @@ export const App: FC<Props> = (props) => {
 import React from "react";
 import ComponentA from "./ui/playground/ComponentA";
 import ComponentB from "./ui/playground/ComponentB";
+import { DEBUG_FLAGS } from "./lib/common/appFlags";
 
 //export const App = () => (
 //  <div>

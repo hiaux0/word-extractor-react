@@ -5,6 +5,7 @@ import {
   KeyboardEvent,
   KeyboardEventHandler,
   useCallback,
+  useEffect,
   useState,
 } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -42,11 +43,14 @@ export const Combobox: FC<ComboboxProps> = (props) => {
   const [searchValue, setSearchValue] = useState("");
 
   const addNewItem = useCallback(() => {
-    /*prettier-ignore*/ console.log("[Combobox.tsx,43] searchValue: ", searchValue);
     onAddNewItem?.(searchValue);
     setValue(searchValue);
     setOpen(false);
   }, [onAddNewItem, searchValue]);
+
+  useEffect(() => {
+    setValue(activeItem?.value ?? "");
+  }, [activeItem]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -105,7 +109,6 @@ export const Combobox: FC<ComboboxProps> = (props) => {
                   key={item.value}
                   value={item.value}
                   onSelect={(currentValue) => {
-                    /*prettier-ignore*/ console.log("[Combobox.tsx,109] items: ", items);
                     setValue(currentValue === value ? "" : currentValue);
                     onSelectItem?.(item);
                     setOpen(false);

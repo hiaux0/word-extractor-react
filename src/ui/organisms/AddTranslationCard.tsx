@@ -5,8 +5,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useCallback, useMemo, useState } from "react";
 import { Combobox } from "./Combobox/Combobox";
-import { ISelectItem, ISheet, IWordEntry } from "@/domain/types/types";
-import { CRUDService } from "@/lib/CRUDService";
 import { mapSheetToSelectItem } from "@/lib/UserDefinedMappingService";
 import { useAtom } from "jotai";
 import {
@@ -22,7 +20,6 @@ export function AddTranslationCard() {
 
   const [sheets, setSheets] = useAtom(sheetsAtom);
   const [selectedSheet, setSelectedSheet] = useAtom(selectedSheetAtom);
-  /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,25] selectedSheet: ", selectedSheet);
   const [translation, addTranslation] = useState("");
   const [comment, addComment] = useState("");
 
@@ -36,16 +33,15 @@ export function AddTranslationCard() {
   );
 
   const createTranslation = useCallback(() => {
-    /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,50] createTranslation: ", );
     const source = window.location.href;
     wordsCRUDService.replace(words);
     wordsCRUDService.create({
       sheets: [selectedSheet.id],
       text: "todo: selected",
-      //translation,
-      //comment,
-      translation: "todo: translation",
-      comment: "todo: comment",
+      translation,
+      comment,
+      //translation: "todo: translation",
+      //comment: "todo: comment",
       source,
     });
 
@@ -55,7 +51,6 @@ export function AddTranslationCard() {
 
   const addNewSheet = useCallback((newItem: string) => {
     const created = sheetsCRUDService.create({ name: newItem });
-    /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,57] created: ", created);
     if (!created) return;
     const updated = sheetsCRUDService.readAll();
     setSheets(updated);
@@ -74,7 +69,6 @@ export function AddTranslationCard() {
                 placeholder="Select sheet"
                 onAddNewItem={addNewSheet}
                 onSelectItem={(item) => {
-                /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,77] item: ", item);
                   const found = sheetsCRUDService.readById(item.id);
                   if (!found) return;
                   setSelectedSheet(found);

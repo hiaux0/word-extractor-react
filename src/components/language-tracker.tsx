@@ -94,7 +94,11 @@ export default function LanguageTracker() {
       return included;
     });
 
-    const filtered = filteredBySearch;
+    const sortedByCreated = filteredBySearch.sort(
+      (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime(),
+    );
+
+    const filtered = sortedByCreated;
 
     return filtered;
   }, [words, searchTerm, selectedSheet]);
@@ -163,7 +167,7 @@ export default function LanguageTracker() {
                         onChange={(e) =>
                           updateEntry(entry.id, "text", e.target.value)
                         }
-                        placeholder="Enter original word"
+                        placeholder="Type text"
                       />
                     </TableCell>
                     <TableCell>
@@ -173,7 +177,7 @@ export default function LanguageTracker() {
                         onChange={(e) =>
                           updateEntry(entry.id, "translation", e.target.value)
                         }
-                        placeholder="Enter mother tongue meaning"
+                        placeholder="Type translation"
                       />
                     </TableCell>
                     <TableCell>
@@ -183,7 +187,7 @@ export default function LanguageTracker() {
                         onChange={(e) =>
                           updateEntry(entry.id, "comment", e.target.value)
                         }
-                        placeholder="Enter origin language meaning"
+                        placeholder="Type comment"
                       />
                     </TableCell>
                     <TableCell>
@@ -193,13 +197,13 @@ export default function LanguageTracker() {
                         onChange={(e) =>
                           updateEntry(entry.id, "source", e.target.value)
                         }
-                        placeholder="Enter origin language meaning"
+                        placeholder="Type source"
                       />
                     </TableCell>
 
                     <TableCell>
                       <Button
-                        variant="destructive"
+                        variant="ghost"
                         size="icon"
                         onClick={() => deleteEntry(entry.id)}
                       >

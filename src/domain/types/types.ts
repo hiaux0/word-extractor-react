@@ -50,17 +50,24 @@ export interface Browser {
   // [ "manifest", "events", "types", "bookmarks", "browsingData", "captivePortal", "commands", "devtools", "find", "history", "identity", "contextMenus", "menus", "omnibox", "pageAction", "pkcs11", "geckoProfiler", "search", "sessions", "sidebarAction", "topSites", "tabs", "windows", "extensionTypes", "browserSettings", "clipboard", "alarms", "contextualIdentities", "contentScripts", "dns", "cookies", "declarativeNetRequest", "activityLog", "downloads", "idle", "management", "networkStatus", "notifications", "permissions", "privacy", "proxy", "scripting", "telemetry", "theme", "userScripts", "webNavigation", "experiments", "webRequest", "normandyAddonStudy", "i18n", "extension", "runtime", "test", "storage", "menusInternal", "pictureInPictureChild", "aboutConfigPrefs", "browserAction" ]
 }
 
-export interface IWordEntry {
+export interface IDateAndTime {
+  created: string;
+  modified?: string;
+  lastUsed?: string;
+}
+
+export type IWordEntry = {
   id: string;
   text: string;
   translation: string;
   comment: string;
   source: string;
   sheets: string[];
-}
+} & IDateAndTime;
 
 export const defaultWordEntry: IWordEntry = {
   id: "",
+  created: "",
   text: "test",
   translation: "test",
   comment: "test",
@@ -68,11 +75,13 @@ export const defaultWordEntry: IWordEntry = {
   sheets: [],
 };
 
-export interface ISheet {
+export type ISheet = {
   id: string;
   name: string;
-}
+} & IDateAndTime;
+
 export const defaultSheet: ISheet = {
+  created: "",
   id: "",
   name: "",
 };
