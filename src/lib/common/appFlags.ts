@@ -1,4 +1,4 @@
 export const DEBUG_FLAGS = {
-  showDemo: false,
+  showDemo: true,
   addMockData: true,
 };

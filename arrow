@@ -2,6 +2,7 @@ extension/manifest.json
 arrow
 vite.config.ts
 src/App.tsx
+src/lib/common/appFlags.ts
 index.html
 package.json
 src/ui/pages/ContentScriptPage.tsx

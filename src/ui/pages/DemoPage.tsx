@@ -7,6 +7,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { TypographyDemo } from "../atoms/TypographyDemo";
 import { PopoverDemo } from "../molecules/PopoverDemo";
 import { CreateSheetPopoverDemo } from "../molecules/CreateSheetPopover/CreateSheetPopoverDemo";
+import { DragButtonDemo } from "../atoms/DragButton/DragButtonDemo";
 
 interface DemoPageProps extends ComponentProps<any> {}
 
@@ -16,6 +17,10 @@ export const DemoPage: FC<DemoPageProps> = (props) => {
   const { style } = props;
   return (
     <div>
+      <h1>DragButtonDemo</h1>
+      <DragButtonDemo />
+      <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr />
+
       <h1>CreateSheetPopoverDemo</h1>
       <CreateSheetPopoverDemo />
       <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr /> <hr />
