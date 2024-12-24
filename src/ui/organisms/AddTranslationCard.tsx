@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useCallback, useMemo, useState } from "react";
+import { ComponentProps, useCallback, useMemo, useState } from "react";
 import { Combobox } from "./Combobox/Combobox";
 import { mapSheetToSelectItem } from "@/lib/UserDefinedMappingService";
 import { useAtom } from "jotai";
@@ -16,11 +16,18 @@ import {
 } from "@/lib/StateAtom";
 import { getTextFromSelection } from "@/lib/modules/htmlModules";
 
-export function AddTranslationCard() {
-  const [words, setWords] = useAtom(wordsListAtom);
+interface AddTranslationCardProps extends ComponentProps<any> {
+  text?: string;
+  onAdd?: () => void;
+}
 
+export function AddTranslationCard(props: AddTranslationCardProps) {
+  const { onAdd, text } = props;
+
+  const [words, setWords] = useAtom(wordsListAtom);
   const [sheets, setSheets] = useAtom(sheetsAtom);
   const [selectedSheet, setSelectedSheet] = useAtom(selectedSheetAtom);
+  const [textValue, setTextValue] = useState(text || getTextFromSelection());
   const [translation, addTranslation] = useState("");
   const [comment, addComment] = useState("");
 
@@ -37,7 +44,6 @@ export function AddTranslationCard() {
     const source = window.location.href;
     wordsCRUDService.replace(words);
     const text = getTextFromSelection();
-    /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,40] text: ", text);
     wordsCRUDService.create({
       sheets: [selectedSheet.id],
       text,
@@ -50,6 +56,7 @@ export function AddTranslationCard() {
 
     const updated = wordsCRUDService.readAll(true);
     setWords(updated);
+    onAdd?.();
   }, [selectedSheet, translation, comment]);
 
   const addNewSheet = useCallback((newItem: string) => {
@@ -76,6 +83,14 @@ export function AddTranslationCard() {
                   if (!found) return;
                   setSelectedSheet(found);
                 }}
+              />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="text">Text</Label>
+              <Input
+                id="text"
+                value={textValue}
+                onChange={(event) => setTextValue(event.target.value)}
               />
             </div>
             <div className="flex flex-col space-y-1.5">

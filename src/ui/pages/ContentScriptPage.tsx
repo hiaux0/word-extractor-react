@@ -7,26 +7,15 @@ import {
   useState,
 } from "react";
 import { AddTranslationCard } from "../organisms/AddTranslationCard";
+import { getTextFromSelection } from "@/lib/modules/htmlModules";
 
 interface ContentScriptPageProps extends ComponentProps<any> {}
 
-const CONSTANTS = {
-  localStorageKey: "wordExtractor",
-  tableContainerId: "wordExtractorContainer",
-};
-const adjust = 16;
+const debug = false;
 
 //document.addEventListener("DOMContentLoaded", () => {
 //  console.log("DOMContentLoaded");
 //});
-
-function getTextRect(textNode: Text) {
-  var range = document.createRange();
-  range.selectNode(textNode);
-  var rect = range.getBoundingClientRect();
-  range.detach(); // frees up memory in older browsers
-  return rect;
-}
 
 document.addEventListener("keydown", (event) => {
   const key = event.key;
@@ -44,7 +33,9 @@ const adjustY = 16;
 
 export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
   const [rectCoords, setRectCoords] = useState({ x: -1, y: -1 });
+  const [text, setText] = useState("");
   const mouseDownCoords = useRef({ x: -1, y: -1 });
+  const mouseUpCoords = useRef({ x: -1, y: -1 });
   const hiddenRef = useRef(true);
 
   const hidden = useMemo(
@@ -66,13 +57,6 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
       if (!hiddenRef.current) return;
 
       let { x, y } = mouseDownCoords.current;
-      const sameX = x === event.clientX;
-      const sameY = y === event.clientY;
-      const isSame = sameX && sameY;
-      //if (isSame) {
-      //  setRectCoords({ x: -1, y: -1 });
-      //  return;
-      //}
 
       const ax = Math.max(x, event.clientX);
       const maxY = Math.max(y, event.clientY);
@@ -81,15 +65,36 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
         x: ax,
         y: ay,
       };
-      setRectCoords(coords);
+      mouseUpCoords.current = coords;
+    };
+
+    const handleKeydown = (event: KeyboardEvent) => {
+      const key = event.key;
+      switch (key) {
+        case "Escape": {
+          setRectCoords({ x: -1, y: -1 });
+          break;
+        }
+        case "a": {
+          const selectedText = getTextFromSelection();
+          if (!selectedText) return;
+          setText(selectedText);
+          setRectCoords(mouseUpCoords.current);
+          break;
+        }
+        default:
+        // console.log("other key is pressed");
+      }
     };
 
     document.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("keydown", handleKeydown);
 
     return () => {
       document.removeEventListener("mousedown", handleMouseDown);
       document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener("keydown", handleKeydown);
     };
   }, []);
 
@@ -104,10 +109,17 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
         ...style,
       }}
     >
-      <div>
-        Mouse Coordinates: x: {rectCoords.x}, y: {rectCoords.y}
-      </div>
-      <AddTranslationCard />
+      {debug && (
+        <div>
+          Mouse Coordinates: x: {rectCoords.x}, y: {rectCoords.y}
+        </div>
+      )}
+      <AddTranslationCard
+        text={text}
+        onAdd={() => {
+          setRectCoords({ x: -1, y: -1 });
+        }}
+      />
     </div>
   );
 };
