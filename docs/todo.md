@@ -2,7 +2,7 @@
 # Todo
 - [ ] Highlight existing nodes
 - [ ] adding word in content, should update browserAction
-- [ ] new sheet+ on LT not persisting
+- [x] new sheet+ on LT not persisting
 
 ## Background
 - [ ] Initial sync appears twice due to loaded false->true

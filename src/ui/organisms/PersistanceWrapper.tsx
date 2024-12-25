@@ -51,7 +51,6 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
         action: MESSAGES["database:read"],
       });
     } else {
-      if (isBackground) return setLoaded(true);
       const database = { words, sheets, selectedSheet };
       contentScriptCommunicationService.send({
         payload: database,

@@ -1,4 +1,4 @@
-extension/manifest.json
+docs/todo.md
 arrow
 vite.config.ts
 src/App.tsx
@@ -14,3 +14,4 @@ src/components/language-tracker.tsx
 src/ui/organisms/AddTranslationCard.tsx
 src/ui/molecules/CreateSheetPopover/CreateSheetPopover.tsx
 src/lib/modules/background.ts
+extension/manifest.json
