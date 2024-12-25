@@ -22,6 +22,7 @@ import {
 } from "@/lib/StateAtom";
 import { getTextFromSelection } from "@/lib/modules/htmlModules";
 import { ModeToggle } from "@/components/mode-toggle";
+import { DragWrapper } from "../atoms/DragButton/DragWrapper";
 
 interface AddTranslationCardProps extends ComponentProps<any> {
   text?: string;
@@ -80,58 +81,60 @@ export function AddTranslationCard(props: AddTranslationCardProps) {
   }, [text]);
 
   return (
-    <Card className="w-[350px]">
-      <CardContent className="p-4">
-        <form>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex justify-between">
+    <DragWrapper>
+      <Card className="w-[350px]">
+        <CardContent className="p-4">
+          <form>
+            <div className="grid w-full items-center gap-4">
+              <div className="flex justify-between">
+                <div className="flex flex-col space-y-1.5">
+                  <Label>Input sheet</Label>
+                  <Combobox
+                    items={sheetsAsUIItems}
+                    activeItem={selectedSheetAsUIItem}
+                    placeholder="Select sheet"
+                    onAddNewItem={addNewSheet}
+                    onSelectItem={(item) => {
+                      const found = sheetsCRUDService.readById(item.id);
+                      if (!found) return;
+                      setSelectedSheet(found);
+                    }}
+                  />
+                </div>
+                <ModeToggle />
+              </div>
               <div className="flex flex-col space-y-1.5">
-                <Label>Input sheet</Label>
-                <Combobox
-                  items={sheetsAsUIItems}
-                  activeItem={selectedSheetAsUIItem}
-                  placeholder="Select sheet"
-                  onAddNewItem={addNewSheet}
-                  onSelectItem={(item) => {
-                    const found = sheetsCRUDService.readById(item.id);
-                    if (!found) return;
-                    setSelectedSheet(found);
-                  }}
+                <Label htmlFor="text">Text</Label>
+                <Textarea
+                  id="text"
+                  value={textValue}
+                  onChange={(event) => setTextValue(event.target.value)}
                 />
               </div>
-              <ModeToggle />
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">My translation</Label>
+                <Textarea
+                  id="name"
+                  onChange={(event) => addTranslation(event.target.value)}
+                />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="name">Comment</Label>
+                <Textarea
+                  id="name"
+                  onChange={(event) => addComment(event.target.value)}
+                />
+              </div>
             </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="text">Text</Label>
-              <Textarea
-                id="text"
-                value={textValue}
-                onChange={(event) => setTextValue(event.target.value)}
-              />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">My translation</Label>
-              <Textarea
-                id="name"
-                onChange={(event) => addTranslation(event.target.value)}
-              />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Comment</Label>
-              <Textarea
-                id="name"
-                onChange={(event) => addComment(event.target.value)}
-              />
-            </div>
-          </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex justify-between pb-4">
-        <Button size="sm" onClick={() => createTranslation()}>
-          Add
-        </Button>
-      </CardFooter>
-    </Card>
+          </form>
+        </CardContent>
+        <CardFooter className="flex justify-between pb-4">
+          <Button size="sm" onClick={() => createTranslation()}>
+            Add
+          </Button>
+        </CardFooter>
+      </Card>
+    </DragWrapper>
   );
 }
 

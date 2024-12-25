@@ -1,38 +1,39 @@
-import { Button } from "@/components/ui/button";
-import { Grab } from "lucide-react";
-import { ComponentProps, useCallback, useEffect, useState } from "react";
+import React, { ComponentProps, useCallback, useEffect, useState } from "react";
 
-interface DragButtonProps extends ComponentProps<any> {
-  onDrag?: (coords: { x: number; y: number }) => void;
+interface DragWrapperProps extends ComponentProps<any> {
+  children?: React.ReactNode;
 }
 
 // Implement a drag button component
-export function DragButton(props: DragButtonProps) {
-  const { onDrag } = props;
+export const DragWrapper = (props: DragWrapperProps) => {
+  const { style, children } = props;
 
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
 
   const handleMouseDown = useCallback(
-    (e: React.MouseEvent) => {
+    (event: React.MouseEvent) => {
       setIsDragging(true);
-      const coords = { x: e.clientX, y: e.clientY };
+      const target = event.currentTarget;
+      const pos = target.getBoundingClientRect();
+      const x = event.clientX;
+      const y = event.clientY;
+      const coords = { x, y };
       setStartPosition(coords);
     },
     [setIsDragging, setStartPosition],
   );
 
   const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
+    (event: MouseEvent) => {
       if (isDragging) {
-        const dx = e.clientX - startPosition.x;
+        const dx = event.clientX - startPosition.x;
         const x = position.x + dx;
-        const dy = e.clientY - startPosition.y;
+        const dy = event.clientY - startPosition.y;
         const y = position.y + dy;
         const coords = { x, y };
         setPosition(coords);
-        onDrag?.({ x, y });
       }
     },
     [isDragging, startPosition],
@@ -40,8 +41,7 @@ export function DragButton(props: DragButtonProps) {
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
-    // setStartPosition(position);
-  }, [setIsDragging, setStartPosition, position]);
+  }, [setIsDragging]);
 
   useEffect(() => {
     document.addEventListener("mousemove", handleMouseMove);
@@ -55,22 +55,17 @@ export function DragButton(props: DragButtonProps) {
 
   return (
     <div
+      className="DragWrapper"
       style={{
-        position: "relative",
+        ...style,
+        position: "absolute",
         top: position.y,
         left: position.x,
+        cursor: "move",
       }}
       onMouseDown={handleMouseDown}
     >
-      <Button
-        variant="outline"
-        size="sm"
-        style={{
-          cursor: isDragging ? "grabbing" : "grab",
-        }}
-      >
-        <Grab />
-      </Button>
+      {children}
     </div>
   );
-}
+};
