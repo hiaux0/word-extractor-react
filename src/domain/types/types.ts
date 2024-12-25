@@ -81,7 +81,7 @@ export type ISheet = {
 } & IDateAndTime;
 
 export const defaultSheet: ISheet = {
-  created: "",
+  created: new Date().toISOString(),
   id: "",
   name: "",
 };

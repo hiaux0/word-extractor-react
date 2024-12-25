@@ -80,12 +80,12 @@ export default function LanguageTracker() {
   };
 
   const filteredEntries = useMemo(() => {
-    /*prettier-ignore*/ console.log("----------------------------");
-    /*prettier-ignore*/ console.log("[language-tracker.tsx,75] words: ", words);
+    // /*prettier-ignore*/ console.log("----------------------------");
+    // /*prettier-ignore*/ console.log("[language-tracker.tsx,75] words: ", words);
     const filteredBySheet = words.filter((entry) =>
       entry.sheets.includes(selectedSheet.id),
     );
-    /*prettier-ignore*/ console.log("[language-tracker.tsx,74] filteredBySheet: ", filteredBySheet);
+    // /*prettier-ignore*/ console.log("[language-tracker.tsx,74] filteredBySheet: ", filteredBySheet);
 
     let filteredBySearch = filteredBySheet;
     if (searchTerm) {
@@ -106,12 +106,12 @@ export default function LanguageTracker() {
         return included;
       });
     }
-    /*prettier-ignore*/ console.log("[language-tracker.tsx,79] filteredBySearch: ", filteredBySearch);
+    // /*prettier-ignore*/ console.log("[language-tracker.tsx,79] filteredBySearch: ", filteredBySearch);
 
     const sortedByCreated = filteredBySearch.sort(
       (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime(),
     );
-    /*prettier-ignore*/ console.log("[language-tracker.tsx,96] sortedByCreated: ", sortedByCreated);
+    // /*prettier-ignore*/ console.log("[language-tracker.tsx,96] sortedByCreated: ", sortedByCreated);
 
     const filtered = sortedByCreated;
 

@@ -35,11 +35,15 @@ export const wordsCRUDService = new CRUDService<IWordEntry>([
 ]);
 wordsCRUDService.setDefault(defaultWordEntry);
 const arr = wordsCRUDService.readAll();
-
 export const wordsListAtom = atom(arr);
 
-export const sheetsCRUDService = new CRUDService<ISheet>([]);
+const unassignedSheet: ISheet = {
+  ...defaultSheet,
+  name: "Unassigned",
+};
+export const sheetsCRUDService = new CRUDService<ISheet>([unassignedSheet]);
 sheetsCRUDService.setDefault(defaultSheet);
-export const sheetsAtom = atom<ISheet[]>([]);
+const sheets = sheetsCRUDService.readAll();
+export const sheetsAtom = atom<ISheet[]>(sheets);
 
-export const selectedSheetAtom = atom<ISheet>(defaultSheet);
+export const selectedSheetAtom = atom<ISheet>(unassignedSheet);

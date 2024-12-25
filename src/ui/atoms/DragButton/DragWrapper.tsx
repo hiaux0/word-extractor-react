@@ -57,11 +57,11 @@ export const DragWrapper = (props: DragWrapperProps) => {
     <div
       className="DragWrapper"
       style={{
-        ...style,
         position: "absolute",
+        cursor: "move",
+        ...style,
         top: position.y,
         left: position.x,
-        cursor: "move",
       }}
       onMouseDown={handleMouseDown}
     >

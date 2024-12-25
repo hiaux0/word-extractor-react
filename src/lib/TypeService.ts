@@ -43,4 +43,4 @@ interface IOkay {
   okay: string;
 }
 
-const result = TypeService.mapKeys<IHi, IOkay>(hi, [["hi", "okay"]]);
+// const result = TypeService.mapKeys<IHi, IOkay>(hi, [["hi", "okay"]]);
