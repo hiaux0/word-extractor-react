@@ -16,14 +16,16 @@ import { Label } from "@/components/ui/label";
 import { CRUDService } from "@/lib/CRUDService";
 import { defaultWordEntry, IWordEntry } from "@/domain/types/types";
 import { useAtom, useAtomValue } from "jotai";
-import { selectedSheetAtom, wordsListAtom } from "@/lib/StateAtom";
+import {
+  selectedSheetAtom,
+  wordsCRUDService,
+  wordsListAtom,
+} from "@/lib/StateAtom";
 import { backgroundCommunicationService } from "@/lib/BackgroundCommunicationService";
 import { MESSAGES } from "@/lib/common/constants";
 import { AppSidebar } from "@/ui/organisms/AppSidebar/AppSidebar";
 import { SidebarTrigger } from "./ui/sidebar";
 import { Textarea } from "./ui/textarea";
-
-const sharedDatabase = new CRUDService<IWordEntry>();
 
 export default function LanguageTracker() {
   const [words, setWords] = useAtom(wordsListAtom);
@@ -32,22 +34,17 @@ export default function LanguageTracker() {
   const [searchTerm, setSearchTerm] = useState("");
   const { theme, setTheme } = useTheme();
 
-  const saveEntriesToDatabase = (entries: IWordEntry[]) => {
-    sharedDatabase.replace(entries);
-  };
-
   const addNewEntry = () => {
     const newEntry: IWordEntry = {
       ...defaultWordEntry,
       id: Date.now().toString(),
+      sheets: [selectedSheet.id],
     };
-    const updatedEntries = [...words, newEntry];
+    /*prettier-ignore*/ console.log("[language-tracker.tsx,41] newEntry: ", newEntry);
+    wordsCRUDService.create(newEntry);
+    const updatedEntries = wordsCRUDService.readAll();
+    /*prettier-ignore*/ console.log("[language-tracker.tsx,46] updatedEntries: ", updatedEntries);
     setWords(updatedEntries);
-    saveEntriesToDatabase(updatedEntries);
-    backgroundCommunicationService.send({
-      action: MESSAGES["database:create"],
-      payload: newEntry,
-    });
   };
 
   const updateEntry = (id: string, field: keyof IWordEntry, value: string) => {
@@ -55,13 +52,11 @@ export default function LanguageTracker() {
       entry.id === id ? { ...entry, [field]: value } : entry,
     );
     setWords(updatedEntries);
-    saveEntriesToDatabase(updatedEntries);
   };
 
   const deleteEntry = (id: string) => {
     const updatedEntries = words.filter((entry) => entry.id !== id);
     setWords(updatedEntries);
-    saveEntriesToDatabase(updatedEntries);
   };
 
   const exportData = () => {
@@ -76,29 +71,38 @@ export default function LanguageTracker() {
   };
 
   const filteredEntries = useMemo(() => {
+    /*prettier-ignore*/ console.log("----------------------------");
+    /*prettier-ignore*/ console.log("[language-tracker.tsx,75] words: ", words);
     const filteredBySheet = words.filter((entry) =>
       entry.sheets.includes(selectedSheet.id),
     );
+    /*prettier-ignore*/ console.log("[language-tracker.tsx,74] filteredBySheet: ", filteredBySheet);
 
-    const filteredBySearch = filteredBySheet.filter((word) => {
-      // search for in properties
-      let included = false;
-      Object.entries(word).find(([key, value]) => {
-        const denyList = ["id", "sheets"];
-        if (denyList.includes(key)) return;
-        if (!value) return;
-        const okay = value.toLowerCase().includes(searchTerm.toLowerCase());
-        if (okay) {
-          included = okay;
-        }
+    let filteredBySearch = filteredBySheet;
+    if (searchTerm) {
+      filteredBySearch = filteredBySheet.filter((word) => {
+        // search for in properties
+        let included = false;
+        Object.entries(word).find(([key, value]) => {
+          const denyList = ["id", "sheets"];
+          if (denyList.includes(key)) return;
+          if (!value) return;
+          if (typeof value !== "string") return;
+          const okay = value.toLowerCase().includes(searchTerm.toLowerCase());
+          if (okay) {
+            included = okay;
+          }
+        });
+
+        return included;
       });
-
-      return included;
-    });
+    }
+    /*prettier-ignore*/ console.log("[language-tracker.tsx,79] filteredBySearch: ", filteredBySearch);
 
     const sortedByCreated = filteredBySearch.sort(
       (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime(),
     );
+    /*prettier-ignore*/ console.log("[language-tracker.tsx,96] sortedByCreated: ", sortedByCreated);
 
     const filtered = sortedByCreated;
 
@@ -138,7 +142,7 @@ export default function LanguageTracker() {
                 />
                 <Label htmlFor="dark-mode">Dark Mode</Label>
               </div>
-              <Button onClick={addNewEntry}>
+              <Button onClick={addNewEntry} disabled={!selectedSheet.id}>
                 <PlusCircle className="w-4 h-4 mr-2" />
                 Add Entry
               </Button>

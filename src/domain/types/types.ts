@@ -68,10 +68,10 @@ export type IWordEntry = {
 export const defaultWordEntry: IWordEntry = {
   id: "",
   created: "",
-  text: "test",
-  translation: "test",
-  comment: "test",
-  source: "test",
+  text: "",
+  translation: "",
+  comment: "",
+  source: "",
   sheets: [],
 };
 
