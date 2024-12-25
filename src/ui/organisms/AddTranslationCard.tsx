@@ -29,8 +29,6 @@ interface AddTranslationCardProps extends ComponentProps<any> {
 }
 
 export function AddTranslationCard(props: AddTranslationCardProps) {
-  /*prettier-ignore*/ console.log("-------------------------------------------------------------------");
-  /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,32] AddTranslationCard: ", );
   const { onAdd, text } = props;
 
   const [words, setWords] = useAtom(wordsListAtom);
@@ -39,7 +37,6 @@ export function AddTranslationCard(props: AddTranslationCardProps) {
   const [textValue, setTextValue] = useState(
     (text || getTextFromSelection())?.trim(),
   );
-  /*prettier-ignore*/ console.log("[AddTranslationCard.tsx,40] textValue: ", textValue);
   const [translation, addTranslation] = useState("");
   const [comment, addComment] = useState("");
 
@@ -114,7 +111,7 @@ export function AddTranslationCard(props: AddTranslationCardProps) {
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="name">My translation</Label>
-              <Input
+              <Textarea
                 id="name"
                 onChange={(event) => addTranslation(event.target.value)}
               />

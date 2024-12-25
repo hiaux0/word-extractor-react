@@ -7,7 +7,10 @@ import {
   useState,
 } from "react";
 import { AddTranslationCard } from "../organisms/AddTranslationCard";
-import { getTextFromSelection } from "@/lib/modules/htmlModules";
+import {
+  getTextFromSelection,
+  removeNewLines,
+} from "@/lib/modules/htmlModules";
 import { contentScriptCommunicationService } from "@/lib/CommunicationService";
 import { MESSAGES } from "@/lib/common/constants";
 
@@ -34,10 +37,8 @@ document.addEventListener("keydown", (event) => {
 const adjustY = 16;
 
 export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
-  /*prettier-ignore*/ console.log("[ContentScriptPage.tsx,37] ContentScriptPage: ", );
   const [rectCoords, setRectCoords] = useState({ x: -1, y: -1 });
   const [text, setText] = useState("");
-  /*prettier-ignore*/ console.log("[ContentScriptPage.tsx,40] text: ", text);
   const [hasError, setHasError] = useState(false);
   const mouseDownCoords = useRef({ x: -1, y: -1 });
   const mouseUpCoords = useRef({ x: -1, y: -1 });
@@ -89,9 +90,10 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
             setHasError(true);
           }
 
-          const selectedText = getTextFromSelection();
+          let selectedText = getTextFromSelection();
           if (!selectedText) return;
-          /*prettier-ignore*/ console.log("[ContentScriptPage.tsx,95] selectedText: ", selectedText);
+          selectedText = removeNewLines(selectedText);
+          /*prettier-ignore*/ console.log("[ContentScriptPage.tsx,96] selectedText: ", selectedText);
           setText(selectedText);
           setRectCoords(mouseUpCoords.current);
           break;

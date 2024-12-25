@@ -7,3 +7,7 @@ export function getTextFromSelection() {
     return text;
   } catch {}
 }
+
+export function removeNewLines(input: string): string {
+  return input.replace(/\n/g, " ");
+}
