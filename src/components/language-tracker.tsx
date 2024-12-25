@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   Table,
   TableBody,
@@ -29,35 +29,38 @@ import { Textarea } from "./ui/textarea";
 
 export default function LanguageTracker() {
   const [words, setWords] = useAtom(wordsListAtom);
-  /*prettier-ignore*/ console.log("[language-tracker.tsx,29] words: ", words);
   const selectedSheet = useAtomValue(selectedSheetAtom);
   const [searchTerm, setSearchTerm] = useState("");
   const { theme, setTheme } = useTheme();
 
-  const addNewEntry = () => {
+  const addNewEntry = useCallback(() => {
     const newEntry: IWordEntry = {
       ...defaultWordEntry,
       id: Date.now().toString(),
       sheets: [selectedSheet.id],
     };
-    /*prettier-ignore*/ console.log("[language-tracker.tsx,41] newEntry: ", newEntry);
     wordsCRUDService.create(newEntry);
     const updatedEntries = wordsCRUDService.readAll();
-    /*prettier-ignore*/ console.log("[language-tracker.tsx,46] updatedEntries: ", updatedEntries);
     setWords(updatedEntries);
-  };
+  }, [words, selectedSheet]);
 
-  const updateEntry = (id: string, field: keyof IWordEntry, value: string) => {
-    const updatedEntries = words.map((entry) =>
-      entry.id === id ? { ...entry, [field]: value } : entry,
-    );
-    setWords(updatedEntries);
-  };
+  const updateEntry = useCallback(
+    (id: string, field: keyof IWordEntry, value: string) => {
+      const updatedEntries = words.map((entry) =>
+        entry.id === id ? { ...entry, [field]: value } : entry,
+      );
+      setWords(updatedEntries);
+    },
+    [words],
+  );
 
-  const deleteEntry = (id: string) => {
-    const updatedEntries = words.filter((entry) => entry.id !== id);
-    setWords(updatedEntries);
-  };
+  const deleteEntry = useCallback(
+    (id: string) => {
+      const updatedEntries = words.filter((entry) => entry.id !== id);
+      setWords(updatedEntries);
+    },
+    [words],
+  );
 
   const exportData = () => {
     const dataStr = JSON.stringify(words, null, 2);
