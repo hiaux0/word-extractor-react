@@ -32,16 +32,23 @@ export function DragButton(props: DragButtonProps) {
         const y = position.y + dy;
         const coords = { x, y };
         setPosition(coords);
-        onDrag?.({ x, y });
+        onDrag?.(coords);
       }
     },
-    [isDragging, startPosition],
+    [
+      isDragging,
+      onDrag,
+      position.x,
+      position.y,
+      startPosition.x,
+      startPosition.y,
+    ],
   );
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
     // setStartPosition(position);
-  }, [setIsDragging, setStartPosition, position]);
+  }, [setIsDragging]);
 
   useEffect(() => {
     document.addEventListener("mousemove", handleMouseMove);
@@ -51,14 +58,12 @@ export function DragButton(props: DragButtonProps) {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [handleMouseDown, handleMouseUp, isDragging]);
+  }, [handleMouseDown, handleMouseMove, handleMouseUp, isDragging]);
 
   return (
     <div
       style={{
         position: "relative",
-        top: position.y,
-        left: position.x,
       }}
       onMouseDown={handleMouseDown}
     >
