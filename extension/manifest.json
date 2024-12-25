@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "word-extractor",
   "description": "description",
   "version": "0.0.1",
@@ -7,7 +7,7 @@
     "64": "icons/icon.png"
   },
   "background": {
-    "scripts": ["background/background.js"]
+    "service_worker": "background/background.js"
   },
   "content_scripts": [
     {
@@ -16,21 +16,16 @@
       "css": ["dist/index.css"]
     }
   ],
-  "browser_action": {
+  "action": {
     "default_icon": {
       "64": "icons/icon.png"
     },
-    "default_title": "word-extractor-ba"
-  },
-  "page_action": {
-    "default_icon": {
-      "64": "icons/icon.png"
-    },
-    "default_popup": "pageAction/index.html",
-    "default_title": "word-extractor"
+    "default_title": "word-extractor-ba",
+    "default_popup": "pageAction/index.html"
   },
   "options_ui": {
     "page": "options/index.html"
   },
-  "permissions": ["activeTab", "contextMenus", "<all_urls>", "storage", "tabs"]
+  "permissions": ["activeTab", "contextMenus", "storage", "tabs"],
+  "host_permissions": ["<all_urls>"]
 }
