@@ -13,7 +13,6 @@ import { PlusCircle, Trash2, Download, Search } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { CRUDService } from "@/lib/CRUDService";
 import { defaultWordEntry, IWordEntry } from "@/domain/types/types";
 import { useAtom, useAtomValue } from "jotai";
 import {
@@ -21,11 +20,10 @@ import {
   wordsCRUDService,
   wordsListAtom,
 } from "@/lib/StateAtom";
-import { backgroundCommunicationService } from "@/lib/BackgroundCommunicationService";
-import { MESSAGES } from "@/lib/common/constants";
 import { AppSidebar } from "@/ui/organisms/AppSidebar/AppSidebar";
 import { SidebarTrigger } from "./ui/sidebar";
 import { Textarea } from "./ui/textarea";
+import { useDebouncedCallback } from "@/hooks/useDebouncedCallback";
 
 export default function LanguageTracker() {
   const [words, setWords] = useAtom(wordsListAtom);
@@ -44,7 +42,7 @@ export default function LanguageTracker() {
     setWords(updatedEntries);
   }, [words, selectedSheet]);
 
-  const updateEntry = useCallback(
+  const updateEntry = useDebouncedCallback(
     (id: string, field: keyof IWordEntry, value: string) => {
       const updatedEntries = words.map((entry) =>
         entry.id === id ? { ...entry, [field]: value } : entry,
@@ -52,6 +50,7 @@ export default function LanguageTracker() {
       setWords(updatedEntries);
     },
     [words],
+    500,
   );
 
   const deleteEntry = useCallback(
@@ -145,13 +144,13 @@ export default function LanguageTracker() {
                 />
                 <Label htmlFor="dark-mode">Dark Mode</Label>
               </div>
-              <Button onClick={addNewEntry} disabled={!selectedSheet.id}>
-                <PlusCircle className="w-4 h-4 mr-2" />
-                Add Entry
-              </Button>
               <Button onClick={exportData} variant="outline">
                 <Download className="w-4 h-4 mr-2" />
                 Export
+              </Button>
+              <Button onClick={addNewEntry} disabled={!selectedSheet.id}>
+                <PlusCircle className="w-4 h-4 mr-2" />
+                Add Entry
               </Button>
             </div>
           </div>
@@ -176,6 +175,7 @@ export default function LanguageTracker() {
                           updateEntry(entry.id, "text", e.target.value)
                         }
                         placeholder="Type text"
+                        rows={1}
                       />
                     </TableCell>
                     <TableCell>
@@ -185,6 +185,7 @@ export default function LanguageTracker() {
                           updateEntry(entry.id, "translation", e.target.value)
                         }
                         placeholder="Type translation"
+                        rows={1}
                       />
                     </TableCell>
                     <TableCell>
@@ -194,6 +195,7 @@ export default function LanguageTracker() {
                           updateEntry(entry.id, "comment", e.target.value)
                         }
                         placeholder="Type comment"
+                        rows={1}
                       />
                     </TableCell>
                     <TableCell>

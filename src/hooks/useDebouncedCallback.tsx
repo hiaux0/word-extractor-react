@@ -2,8 +2,8 @@ import { useEffect, useRef, useCallback } from "react";
 
 export function useDebouncedCallback<A extends any[]>(
   callback: (...args: A) => void,
-  wait: number,
   deps: React.DependencyList = [], // Optional deps array
+  wait: number = 200,
 ) {
   // Track args & timeout handle between calls
   const argsRef = useRef<A>();

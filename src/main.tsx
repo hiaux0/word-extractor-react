@@ -5,13 +5,16 @@ import "./index.css";
 import { Provider } from "jotai";
 import { PersistanceWrapper } from "./ui/organisms/PersistanceWrapper";
 import { SidebarProvider } from "./components/ui/sidebar";
+import { ThemeProvider } from "next-themes";
 
 createRoot(document.getElementById("app")!).render(
   <Provider>
     <PersistanceWrapper>
-      <SidebarProvider>
-        <App root={document.getElementById("app")} />
-      </SidebarProvider>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <SidebarProvider>
+          <App root={document.getElementById("app")} />
+        </SidebarProvider>
+      </ThemeProvider>
     </PersistanceWrapper>
   </Provider>,
 );

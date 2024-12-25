@@ -130,9 +130,15 @@ export function AppSidebar() {
                     <SidebarMenuButton asChild>
                       <span
                         onClick={() => selectSheet(item.id)}
-                        className={cn("cursor-pointer", {
-                          "bg-zinc-200 hover:bg-zinc-200": isSelected(item.id),
-                        })}
+                        className={cn(
+                          "cursor-pointer hover:text-sidebar-foreground/70",
+                          {
+                            "bg-sidebar-accent": isSelected(item.id),
+                            "hover:text-sidebar-foreground": isSelected(
+                              item.id,
+                            ),
+                          },
+                        )}
                       >
                         {item.name}
                       </span>
