@@ -6,11 +6,11 @@ src/lib/common/appFlags.ts
 src/domain/types/types.ts
 src/lib/StateService.ts
 src/lib/CommunicationService.ts
+src/ui/organisms/AppSidebar/AppSidebar.tsx
 src/ui/pages/ContentScriptPage.tsx
 src/lib/PersistanceService.ts
 src/ui/organisms/PersistanceWrapper.tsx
 src/components/language-tracker.tsx
-src/ui/organisms/AppSidebar/AppSidebar.tsx
 src/ui/organisms/AddTranslationCard.tsx
 src/ui/molecules/CreateSheetPopover/CreateSheetPopover.tsx
 src/lib/modules/background.ts

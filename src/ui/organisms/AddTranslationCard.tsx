@@ -51,10 +51,9 @@ export function AddTranslationCard(props: AddTranslationCardProps) {
   const createTranslation = useCallback(() => {
     const source = window.location.href;
     wordsCRUDService.replace(words);
-    const text = getTextFromSelection();
     wordsCRUDService.create({
       sheets: [selectedSheet.id],
-      text,
+      text: textValue,
       translation,
       comment,
       //translation: "todo: translation",

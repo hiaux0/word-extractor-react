@@ -36,6 +36,7 @@ import { useAtom, useAtomValue } from "jotai";
 import { ChevronDown, ChevronUp, User2 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { AddTranslationCard } from "../AddTranslationCard";
+import { DEBUG_FLAGS } from "@/lib/common/appFlags";
 
 export function AppSidebar() {
   const [sheets, setSheets] = useAtom(sheetsAtom);
@@ -144,7 +145,7 @@ export function AppSidebar() {
         </Collapsible>
       </SidebarContent>
 
-      <AddTranslationCard />
+      {DEBUG_FLAGS.debugUI && <AddTranslationCard />}
 
       <SidebarFooter>
         <SidebarMenu>

@@ -2,9 +2,9 @@ import { Browser } from "@/domain/types/types";
 
 console.log("[ ][C] 0. Extension content script is active.");
 
-if (!document.getElementById("root")) {
+if (!document.getElementById("app")) {
   const container = document.createElement("div");
-  container.id = "root";
+  container.id = "app";
   container.dataset.isContent = "true";
   container.style.position = "absolute";
   container.style.top = "0";

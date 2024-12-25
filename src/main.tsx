@@ -6,11 +6,11 @@ import { Provider } from "jotai";
 import { PersistanceWrapper } from "./ui/organisms/PersistanceWrapper";
 import { SidebarProvider } from "./components/ui/sidebar";
 
-createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById("app")!).render(
   <Provider>
     <PersistanceWrapper>
       <SidebarProvider open>
-        <App root={document.getElementById("root")} />
+        <App root={document.getElementById("app")} />
       </SidebarProvider>
     </PersistanceWrapper>
   </Provider>,

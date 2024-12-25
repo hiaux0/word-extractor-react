@@ -26,6 +26,7 @@ const sharedDatabase = new CRUDService<IWordEntry>();
 
 export default function LanguageTracker() {
   const [words, setWords] = useAtom(wordsListAtom);
+  /*prettier-ignore*/ console.log("[language-tracker.tsx,29] words: ", words);
   const selectedSheet = useAtomValue(selectedSheetAtom);
   const [searchTerm, setSearchTerm] = useState("");
   const { theme, setTheme } = useTheme();
