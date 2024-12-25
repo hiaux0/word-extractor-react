@@ -9,7 +9,7 @@ import { SidebarProvider } from "./components/ui/sidebar";
 createRoot(document.getElementById("app")!).render(
   <Provider>
     <PersistanceWrapper>
-      <SidebarProvider open>
+      <SidebarProvider>
         <App root={document.getElementById("app")} />
       </SidebarProvider>
     </PersistanceWrapper>

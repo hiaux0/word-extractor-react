@@ -21,6 +21,7 @@ import { backgroundCommunicationService } from "@/lib/BackgroundCommunicationSer
 import { MESSAGES } from "@/lib/common/constants";
 import { AppSidebar } from "@/ui/organisms/AppSidebar/AppSidebar";
 import { SidebarTrigger } from "./ui/sidebar";
+import { Textarea } from "./ui/textarea";
 
 const sharedDatabase = new CRUDService<IWordEntry>();
 
@@ -108,7 +109,7 @@ export default function LanguageTracker() {
     <>
       <AppSidebar />
 
-      <div className="space-y-4">
+      <div className="space-y-4 w-full">
         <section className="flex items-center">
           <SidebarTrigger className="p-5" />
           <h1 className="text-2xl font-bold">{selectedSheet.name}</h1>
@@ -162,8 +163,7 @@ export default function LanguageTracker() {
                 {filteredEntries.map((entry) => (
                   <TableRow key={entry.id}>
                     <TableCell>
-                      <Input
-                        type="text"
+                      <Textarea
                         value={entry.text}
                         onChange={(e) =>
                           updateEntry(entry.id, "text", e.target.value)
@@ -172,8 +172,7 @@ export default function LanguageTracker() {
                       />
                     </TableCell>
                     <TableCell>
-                      <Input
-                        type="text"
+                      <Textarea
                         value={entry.translation}
                         onChange={(e) =>
                           updateEntry(entry.id, "translation", e.target.value)
@@ -182,8 +181,7 @@ export default function LanguageTracker() {
                       />
                     </TableCell>
                     <TableCell>
-                      <Input
-                        type="text"
+                      <Textarea
                         value={entry.comment}
                         onChange={(e) =>
                           updateEntry(entry.id, "comment", e.target.value)
@@ -192,14 +190,15 @@ export default function LanguageTracker() {
                       />
                     </TableCell>
                     <TableCell>
-                      <Input
-                        type="text"
-                        value={entry.source}
-                        onChange={(e) =>
-                          updateEntry(entry.id, "source", e.target.value)
-                        }
-                        placeholder="Type source"
-                      />
+                      <a
+                        className="inline-block max-h-14  w-[130px] whitespace-nowrap overflow-hidden  overflow-ellipsis"
+                        rel="noreferrer noopener"
+                        target="_blank"
+                        href={entry.source}
+                        title={entry.source}
+                      >
+                        {entry.source}
+                      </a>
                     </TableCell>
 
                     <TableCell>
