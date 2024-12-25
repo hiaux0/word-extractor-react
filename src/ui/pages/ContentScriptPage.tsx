@@ -36,10 +36,29 @@ document.addEventListener("keydown", (event) => {
 
 const adjustY = 16;
 
+export const WordExtractorError = () => {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: 30,
+        textAlign: "center",
+        backgroundColor: "#d67c7c",
+      }}
+    >
+      [Word Extractor] There was an error. Try reload the page
+    </div>
+  );
+};
+
 export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
   const [rectCoords, setRectCoords] = useState({ x: -1, y: -1 });
   const [text, setText] = useState("");
   const [hasError, setHasError] = useState(false);
+  const scrollTopRef = useRef(0);
   const mouseDownCoords = useRef({ x: -1, y: -1 });
   const mouseUpCoords = useRef({ x: -1, y: -1 });
   const hiddenRef = useRef(true);
@@ -55,7 +74,9 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
 
   useEffect(() => {
     const handleMouseDown = (event: MouseEvent) => {
+      /*prettier-ignore*/ console.log("[ContentScriptPage.tsx,76] event: ", event);
       mouseDownCoords.current = { x: event.clientX, y: event.clientY };
+      scrollTopRef.current = window.scrollY;
       // setRectCoords({ x: -1, y: -1 });
     };
 
@@ -67,9 +88,11 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
       const ax = Math.max(x, event.clientX);
       const maxY = Math.max(y, event.clientY);
       const ay = maxY + adjustY;
+      const finalY = ay + scrollTopRef.current;
+
       const coords = {
         x: ax,
-        y: ay,
+        y: finalY,
       };
       mouseUpCoords.current = coords;
     };
@@ -114,23 +137,7 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
     };
   }, []);
 
-  if (hasError)
-    return (
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: 30,
-          textAlign: "center",
-          backgroundColor: "#d67c7c",
-          ...style,
-        }}
-      >
-        [Word Extractor] There was an error. Try reload the page
-      </div>
-    );
+  if (hasError) return <WordExtractorError />;
 
   return (
     <div
@@ -139,7 +146,7 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
         top: rectCoords.y,
         left: rectCoords.x,
         display: hidden ? "none" : "block",
-        backgroundColor: "white",
+        backgroundColor: "transparent",
         ...style,
       }}
     >
