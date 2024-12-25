@@ -8,6 +8,8 @@ import {
 } from "react";
 import { AddTranslationCard } from "../organisms/AddTranslationCard";
 import { getTextFromSelection } from "@/lib/modules/htmlModules";
+import { contentScriptCommunicationService } from "@/lib/CommunicationService";
+import { MESSAGES } from "@/lib/common/constants";
 
 interface ContentScriptPageProps extends ComponentProps<any> {}
 
@@ -34,6 +36,7 @@ const adjustY = 16;
 export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
   const [rectCoords, setRectCoords] = useState({ x: -1, y: -1 });
   const [text, setText] = useState("");
+  const [hasError, setHasError] = useState(false);
   const mouseDownCoords = useRef({ x: -1, y: -1 });
   const mouseUpCoords = useRef({ x: -1, y: -1 });
   const hiddenRef = useRef(true);
@@ -76,6 +79,15 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
           break;
         }
         case "a": {
+          console.clear();
+          try {
+            contentScriptCommunicationService.send({
+              action: MESSAGES["database:read"],
+            });
+          } catch {
+            setHasError(true);
+          }
+
           const selectedText = getTextFromSelection();
           if (!selectedText) return;
           setText(selectedText);
@@ -97,6 +109,24 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
       document.removeEventListener("keydown", handleKeydown);
     };
   }, []);
+
+  if (hasError)
+    return (
+      <div
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: 30,
+          textAlign: "center",
+          backgroundColor: "#d67c7c",
+          ...style,
+        }}
+      >
+        [Word Extractor] There was an error. Try reload the page
+      </div>
+    );
 
   return (
     <div

@@ -8,7 +8,7 @@ export interface ISelectItem {
 
 export interface IMessagePayload<T = IDatabase> {
   action: string;
-  payload: T;
+  payload?: T;
 }
 
 export interface IConnection {

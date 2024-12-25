@@ -1,6 +1,5 @@
 import { useAtom } from "jotai";
 import { ComponentProps, FC, useEffect, useState } from "react";
-import { localStorageService } from "@/lib/PersistanceService";
 import {
   selectedSheetAtom,
   sheetsAtom,
@@ -10,7 +9,6 @@ import {
 } from "@/lib/StateAtom";
 import { contentScriptCommunicationService } from "@/lib/CommunicationService";
 import { MESSAGES } from "@/lib/common/constants";
-import { backgroundPersistanceService } from "@/lib/BackgroundPersistanceService";
 
 contentScriptCommunicationService.initListeners();
 
@@ -32,50 +30,36 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
 
   useEffect(() => {
     if (!loaded) {
-      if (words.length === 0) {
-        if (isBackground) {
-          backgroundPersistanceService.get().then((data) => {
-            setLoaded(true);
-            if (!data) return;
-            setWords(data.words);
-            setSheets(data.sheets);
-          });
-          return;
-        }
-
-        const database = localStorageService.get();
-        /*prettier-ignore*/ console.log("[PersistanceWrapper.tsx,45] database: ", database);
-        if (!database) return setLoaded(true);
-        const loadedWords = database.words;
-        /*prettier-ignore*/ console.log("[ ][C] Loaded words from localStorage", loadedWords);
-        // if (loadedWords.length === 0) return setLoaded(true);
-        /*prettier-ignore*/ console.log("[ ][C] Sending loaded words to [CS] from [PW]");
-        contentScriptCommunicationService.send({
-          payload: database,
-          action: MESSAGES["database:sync"],
-        });
-        setWords(loadedWords);
-        wordsCRUDService.replace(loadedWords);
-        setSheets(database.sheets);
-        sheetsCRUDService.replace(database.sheets);
-        setSelectedSheet(database.selectedSheet ?? database.sheets[0]);
-      }
-
-      setLoaded(true);
+      contentScriptCommunicationService.on(
+        MESSAGES["database:read"],
+        ({ payload }) => {
+          const database = payload;
+          if (!database) return setLoaded(true);
+          const loadedWords = database.words;
+          setWords(loadedWords);
+          wordsCRUDService.replace(loadedWords);
+          setSheets(database.sheets);
+          sheetsCRUDService.replace(database.sheets);
+          setSelectedSheet(
+            database.selectedSheet.id
+              ? database.selectedSheet
+              : database.sheets[0],
+          );
+        },
+      );
+      contentScriptCommunicationService.send({
+        action: MESSAGES["database:read"],
+      });
     } else {
       if (isBackground) return setLoaded(true);
       const database = { words, sheets, selectedSheet };
-      localStorageService.set(database);
       contentScriptCommunicationService.send({
-        payload: {
-          words,
-          sheets,
-          selectedSheet,
-        },
+        payload: database,
         action: MESSAGES["database:sync"],
       });
-      setLoaded(true);
     }
+
+    setLoaded(true);
   }, [words, sheets, selectedSheet]);
 
   if (!loaded) return <>Loading...</>;

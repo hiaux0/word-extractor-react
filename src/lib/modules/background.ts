@@ -1,6 +1,4 @@
 import { Browser } from "@/domain/types/types";
-import { CRUDService } from "../CRUDService";
-import { localStorageService } from "../PersistanceService";
 import { backgroundCommunicationService } from "../BackgroundCommunicationService";
 
 // Usage example

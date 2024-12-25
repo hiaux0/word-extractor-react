@@ -1,4 +1,5 @@
 export enum MESSAGES {
+  "database:read" = "database:read",
   "database:sync" = "database:sync",
   "database:create" = "database:create",
 }

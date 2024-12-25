@@ -19,15 +19,18 @@ class ContentScriptCommunicationService implements ICommunicationService {
   }
 
   public initListeners() {
-    //this.port.postMessage({
-    //  greeting: "[A1 Content] hello from content script",
-    //});
     if (!this.port) return;
-    this.port.onMessage.addListener((m) => {
+    this.port.onMessage.addListener((m: IMessagePayload) => {
       switch (m.action) {
+        case MESSAGES["database:read"]: {
+          const database = m.payload;
+          /*prettier-ignore*/ console.log(">>>>> [CommunicationService.ts,27] database: ", database);
+          break;
+        }
         case MESSAGES["database:create"]: {
           console.log("[ ][C] Background message, so persist");
           /*prettier-ignore*/ console.log("[CommunicationService.ts,29] m: ", m);
+          // TODO: create database
           break;
         }
         default: {
@@ -35,10 +38,6 @@ class ContentScriptCommunicationService implements ICommunicationService {
           console.error("No known action: ", m.action);
         }
       }
-      //console.log(
-      //  "[A2 Content] In content script, received message from background script: ",
-      //);
-      //console.log("  ", m.greeting);
     });
 
     document.body.addEventListener("click", () => {
@@ -49,10 +48,19 @@ class ContentScriptCommunicationService implements ICommunicationService {
   }
 
   public send(data: IMessagePayload) {
-    if (!this.port) return
+    if (!this.port) return;
     /*prettier-ignore*/ console.log("[ ][C] Sending message from [CS]", data);
     this.port.postMessage(data);
     // this.port.postMessage(JSON.stringify(data));
+  }
+
+  public on(
+    message: keyof typeof MESSAGES,
+    callback: (data: IMessagePayload) => void,
+  ) {
+    this.port.onMessage.addListener((m: IMessagePayload) => {
+      if (m.action === message) callback(m);
+    });
   }
 }
 

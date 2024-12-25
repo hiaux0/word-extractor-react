@@ -5,6 +5,7 @@ import { MESSAGES } from "./common/constants";
 
 export declare var browser: Browser & typeof globalThis;
 
+console.clear();
 export class BackgroundCommunicationService implements ICommunicationService {
   private port: IConnection;
 
@@ -15,8 +16,14 @@ export class BackgroundCommunicationService implements ICommunicationService {
       //this.port.postMessage({
       //  greeting: "[B1 Background] hi there content script!",
       //});
-      this.port.onMessage.addListener((m: IMessagePayload) => {
+      this.port.onMessage.addListener(async (m: IMessagePayload) => {
         switch (m.action) {
+          case MESSAGES["database:read"]: {
+            const data = await backgroundPersistanceService.get();
+            if (!data) return;
+            this.send({ action: MESSAGES["database:read"], payload: data });
+            break;
+          }
           case MESSAGES["database:sync"]: {
             console.log("[B][ ] Background message, so persist");
             backgroundPersistanceService.set(m.payload);
@@ -48,6 +55,7 @@ export class BackgroundCommunicationService implements ICommunicationService {
   }
 
   public send<T>(data: IMessagePayload<T>) {
+    /*prettier-ignore*/ console.log("[B][ ] Sending message from [B]", data);
     this.port.postMessage(data);
   }
 }
