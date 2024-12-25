@@ -24,6 +24,7 @@ import { AppSidebar } from "@/ui/organisms/AppSidebar/AppSidebar";
 import { SidebarTrigger } from "./ui/sidebar";
 import { Textarea } from "./ui/textarea";
 import { useDebouncedCallback } from "@/hooks/useDebouncedCallback";
+import { ModeToggle } from "./mode-toggle";
 
 export default function LanguageTracker() {
   const [words, setWords] = useAtom(wordsListAtom);
@@ -64,12 +65,18 @@ export default function LanguageTracker() {
   const exportData = () => {
     const dataStr = JSON.stringify(words, null, 2);
     const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
-    const exportFileDefaultName = "language_entries.json";
+    const exportFileDefaultName = `${getCurrentDate()}__word-extractor.json`;
 
     const linkElement = document.createElement("a");
     linkElement.setAttribute("href", dataUri);
     linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
+
+    function getCurrentDate() {
+      const date = new Date();
+      const dateString = date.toISOString();
+      return dateString;
+    }
   };
 
   const filteredEntries = useMemo(() => {
@@ -135,14 +142,7 @@ export default function LanguageTracker() {
             </div>
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
-                <Switch
-                  id="dark-mode"
-                  checked={theme === "dark"}
-                  onCheckedChange={() =>
-                    setTheme(theme === "light" ? "dark" : "light")
-                  }
-                />
-                <Label htmlFor="dark-mode">Dark Mode</Label>
+                <ModeToggle />
               </div>
               <Button onClick={exportData} variant="outline">
                 <Download className="w-4 h-4 mr-2" />

@@ -21,6 +21,7 @@ import {
   wordsListAtom,
 } from "@/lib/StateAtom";
 import { getTextFromSelection } from "@/lib/modules/htmlModules";
+import { ModeToggle } from "@/components/mode-toggle";
 
 interface AddTranslationCardProps extends ComponentProps<any> {
   text?: string;
@@ -83,19 +84,22 @@ export function AddTranslationCard(props: AddTranslationCardProps) {
       <CardContent className="p-4">
         <form>
           <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label>Input sheet</Label>
-              <Combobox
-                items={sheetsAsUIItems}
-                activeItem={selectedSheetAsUIItem}
-                placeholder="Select sheet"
-                onAddNewItem={addNewSheet}
-                onSelectItem={(item) => {
-                  const found = sheetsCRUDService.readById(item.id);
-                  if (!found) return;
-                  setSelectedSheet(found);
-                }}
-              />
+            <div className="flex justify-between">
+              <div className="flex flex-col space-y-1.5">
+                <Label>Input sheet</Label>
+                <Combobox
+                  items={sheetsAsUIItems}
+                  activeItem={selectedSheetAsUIItem}
+                  placeholder="Select sheet"
+                  onAddNewItem={addNewSheet}
+                  onSelectItem={(item) => {
+                    const found = sheetsCRUDService.readById(item.id);
+                    if (!found) return;
+                    setSelectedSheet(found);
+                  }}
+                />
+              </div>
+              <ModeToggle />
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="text">Text</Label>
