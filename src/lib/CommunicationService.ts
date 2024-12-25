@@ -58,6 +58,7 @@ class ContentScriptCommunicationService implements ICommunicationService {
     message: keyof typeof MESSAGES,
     callback: (data: IMessagePayload) => void,
   ) {
+    if (!this.port) return;
     this.port.onMessage.addListener((m: IMessagePayload) => {
       if (m.action === message) callback(m);
     });

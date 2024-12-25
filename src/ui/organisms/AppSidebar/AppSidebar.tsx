@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
@@ -31,9 +32,10 @@ import {
 } from "@/lib/StateAtom";
 import { cn } from "@/lib/utils";
 import { CreateSheetPopover } from "@/ui/molecules/CreateSheetPopover/CreateSheetPopover";
-import { useAtom } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { ChevronDown, ChevronUp, User2 } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
+import { AddTranslationCard } from "../AddTranslationCard";
 
 export function AppSidebar() {
   const [sheets, setSheets] = useAtom(sheetsAtom);
@@ -141,6 +143,8 @@ export function AppSidebar() {
           </SidebarGroup>
         </Collapsible>
       </SidebarContent>
+
+      <AddTranslationCard />
 
       <SidebarFooter>
         <SidebarMenu>

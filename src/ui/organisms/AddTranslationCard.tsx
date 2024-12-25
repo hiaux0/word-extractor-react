@@ -72,6 +72,7 @@ export function AddTranslationCard(props: AddTranslationCardProps) {
     if (!created) return;
     const updated = sheetsCRUDService.readAll();
     setSheets(updated);
+    setSelectedSheet(created);
   }, []);
 
   useEffect(() => {

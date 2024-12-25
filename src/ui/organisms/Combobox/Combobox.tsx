@@ -6,6 +6,7 @@ import {
   KeyboardEventHandler,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -42,11 +43,38 @@ export const Combobox: FC<ComboboxProps> = (props) => {
   const [value, setValue] = useState(activeItem?.value ?? "");
   const [searchValue, setSearchValue] = useState("");
 
+  /*prettier-ignore*/ console.log("-------------------------------------------------------------------");
+  /*prettier-ignore*/ console.log("[Combobox.tsx,40] items: ", items);
+
+  const filteredItems = useMemo(() => {
+    return items.filter((item) =>
+      item.label.toLowerCase().includes(searchValue.toLowerCase()),
+    );
+  }, [searchValue, items]);
+
+  const reset = useCallback(() => {
+    setOpen(false);
+    setSearchValue("");
+  }, []);
+
   const addNewItem = useCallback(() => {
     onAddNewItem?.(searchValue);
     setValue(searchValue);
-    setOpen(false);
+    reset();
   }, [onAddNewItem, searchValue]);
+
+  const handleEnter = useCallback(
+    (event: KeyboardEvent) => {
+      console.clear();
+      /*prettier-ignore*/ console.log("[Combobox.tsx,67] filteredItems: ", filteredItems);
+      /*prettier-ignore*/ console.log("[Combobox.tsx,67] searchValue: ", searchValue);
+      if (event.key !== "Enter") return;
+      if (filteredItems.length > 0) return; // still items? then return
+
+      addNewItem();
+    },
+    [searchValue],
+  );
 
   useEffect(() => {
     setValue(activeItem?.value ?? "");
@@ -78,18 +106,18 @@ export const Combobox: FC<ComboboxProps> = (props) => {
           <CommandInput
             placeholder={items.length ? "Search item..." : "Enter new item..."}
             onValueChange={setSearchValue}
-            onKeyDown={(event) => event.key === "Enter" && addNewItem()}
+            onKeyDown={handleEnter}
           />
           <CommandList>
             <CommandEmpty>
               {onAddNewItem && searchValue ? (
                 <>
-                  <Button size="sm" onClick={addNewItem}>
-                    Add new item "{searchValue}"
-                  </Button>
                   <div className="text-muted-foreground">
                     Press "Enter" to confirm
                   </div>
+                  <Button size="sm" onClick={addNewItem}>
+                    Add new item "{searchValue}"
+                  </Button>
                 </>
               ) : (
                 <>
@@ -104,14 +132,14 @@ export const Combobox: FC<ComboboxProps> = (props) => {
               )}
             </CommandEmpty>
             <CommandGroup>
-              {items.map((item) => (
+              {filteredItems.map((item) => (
                 <CommandItem
                   key={item.value}
                   value={item.value}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
                     onSelectItem?.(item);
-                    setOpen(false);
+                    reset();
                   }}
                 >
                   <Check

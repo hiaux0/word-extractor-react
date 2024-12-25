@@ -55,6 +55,7 @@ export class BackgroundCommunicationService implements ICommunicationService {
   }
 
   public send<T>(data: IMessagePayload<T>) {
+    if (!this.port) return;
     /*prettier-ignore*/ console.log("[B][ ] Sending message from [B]", data);
     this.port.postMessage(data);
   }
