@@ -43,9 +43,6 @@ export const Combobox: FC<ComboboxProps> = (props) => {
   const [value, setValue] = useState(activeItem?.value ?? "");
   const [searchValue, setSearchValue] = useState("");
 
-  /*prettier-ignore*/ console.log("-------------------------------------------------------------------");
-  /*prettier-ignore*/ console.log("[Combobox.tsx,40] items: ", items);
-
   const filteredItems = useMemo(() => {
     return items.filter((item) =>
       item.label.toLowerCase().includes(searchValue.toLowerCase()),
@@ -65,9 +62,6 @@ export const Combobox: FC<ComboboxProps> = (props) => {
 
   const handleEnter = useCallback(
     (event: KeyboardEvent) => {
-      console.clear();
-      /*prettier-ignore*/ console.log("[Combobox.tsx,67] filteredItems: ", filteredItems);
-      /*prettier-ignore*/ console.log("[Combobox.tsx,67] searchValue: ", searchValue);
       if (event.key !== "Enter") return;
       if (filteredItems.length > 0) return; // still items? then return
 

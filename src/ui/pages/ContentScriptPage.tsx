@@ -34,8 +34,10 @@ document.addEventListener("keydown", (event) => {
 const adjustY = 16;
 
 export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
+  /*prettier-ignore*/ console.log("[ContentScriptPage.tsx,37] ContentScriptPage: ", );
   const [rectCoords, setRectCoords] = useState({ x: -1, y: -1 });
   const [text, setText] = useState("");
+  /*prettier-ignore*/ console.log("[ContentScriptPage.tsx,40] text: ", text);
   const [hasError, setHasError] = useState(false);
   const mouseDownCoords = useRef({ x: -1, y: -1 });
   const mouseUpCoords = useRef({ x: -1, y: -1 });
@@ -79,7 +81,6 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
           break;
         }
         case "a": {
-          console.clear();
           try {
             contentScriptCommunicationService.send({
               action: MESSAGES["database:read"],
@@ -90,6 +91,7 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
 
           const selectedText = getTextFromSelection();
           if (!selectedText) return;
+          /*prettier-ignore*/ console.log("[ContentScriptPage.tsx,95] selectedText: ", selectedText);
           setText(selectedText);
           setRectCoords(mouseUpCoords.current);
           break;

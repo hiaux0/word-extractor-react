@@ -1,12 +1,12 @@
 
 # Todo
-- [ ] Highlight existing text nodes
-## Background
-- [ ] Initial sync appears twice due to loaded false->true
+- [ ] background: Initial sync appears twice due to loaded false->true
     - both times Im sending a sync
         --> fix: handled loaded logic better
+- [ ] Highlight existing text nodes
 # Done
 
+- [x] bug: selected text not getting highlighted
 - [x] change export json logic
 - [x] theme
 - [x] adding word in content, should update browserAction

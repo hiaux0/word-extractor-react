@@ -7,6 +7,9 @@ const Textarea = React.forwardRef<
   React.ComponentProps<"textarea">
 >(({ className, value, ...props }, ref) => {
   const [_value, _setValue] = React.useState(value);
+  React.useEffect(() => {
+    _setValue(value);
+  }, [value]);
   return (
     <textarea
       className={cn(

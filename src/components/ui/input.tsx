@@ -5,6 +5,9 @@ import { cn } from "@/lib/utils";
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, type, value, ...props }, ref) => {
     const [_value, _setValue] = React.useState(value);
+    React.useEffect(() => {
+      _setValue(value);
+    }, [value]);
     return (
       <input
         type={type}
