@@ -1,30 +1,47 @@
 import { Button } from "@/components/ui/button";
 import { Grab } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ComponentProps, useCallback, useEffect, useState } from "react";
+
+interface DragButtonProps extends ComponentProps<any> {
+  onDrag?: (coords: { x: number; y: number }) => void;
+}
 
 // Implement a drag button component
-export function DragButton() {
+export function DragButton(props: DragButtonProps) {
+  const { onDrag } = props;
+
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    setStartPosition({ x: e.clientX, y: e.clientY });
-  };
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      setIsDragging(true);
+      const coords = { x: e.clientX, y: e.clientY };
+      setStartPosition(coords);
+    },
+    [setIsDragging, setStartPosition],
+  );
 
-  const handleMouseMove = (e: MouseEvent) => {
-    if (isDragging) {
-      setPosition({
-        x: e.clientX - startPosition.x,
-        y: e.clientY - startPosition.y,
-      });
-    }
-  };
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (isDragging) {
+        const dx = e.clientX - startPosition.x;
+        const x = position.x + dx;
+        const dy = e.clientY - startPosition.y;
+        const y = position.y + dy;
+        const coords = { x, y };
+        setPosition(coords);
+        onDrag?.({ x, y });
+      }
+    },
+    [isDragging, startPosition],
+  );
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     setIsDragging(false);
-  };
+    // setStartPosition(position);
+  }, [setIsDragging, setStartPosition, position]);
 
   useEffect(() => {
     document.addEventListener("mousemove", handleMouseMove);
@@ -34,19 +51,24 @@ export function DragButton() {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging]);
+  }, [handleMouseDown, handleMouseUp, isDragging]);
 
   return (
     <div
       style={{
-        position: "fixed",
+        position: "relative",
         top: position.y,
         left: position.x,
-        cursor: isDragging ? "grabbing" : "grab",
       }}
       onMouseDown={handleMouseDown}
     >
-      <Button variant="outline" size="sm">
+      <Button
+        variant="outline"
+        size="sm"
+        style={{
+          cursor: isDragging ? "grabbing" : "grab",
+        }}
+      >
         <Grab />
       </Button>
     </div>
