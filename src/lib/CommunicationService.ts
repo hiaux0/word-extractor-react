@@ -8,6 +8,11 @@ export interface ICommunicationService {
   send: (data: IMessagePayload) => void;
 }
 
+// Add polyfill for Chrome compatibility
+if (typeof browser === "undefined" || Object.getPrototypeOf(browser) !== Object.prototype) {
+  var browser = require("webextension-polyfill");
+}
+
 class ContentScriptCommunicationService implements ICommunicationService {
   private port: IConnection;
 

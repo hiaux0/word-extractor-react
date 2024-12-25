@@ -46,7 +46,7 @@ export class BackgroundCommunicationService implements ICommunicationService {
   }
 
   public initListeners() {
-    browser.browserAction.onClicked.addListener(async () => {
+    browser.action.onClicked.addListener(async () => {
       browser.tabs.create({ url: "dist/index.html" });
 
       const data = await backgroundPersistanceService.get();
@@ -60,6 +60,18 @@ export class BackgroundCommunicationService implements ICommunicationService {
     this.port.postMessage(data);
   }
 }
+
+self.addEventListener('install', (event) => {
+  console.log('BCS Service Worker installing.');
+});
+
+self.addEventListener('activate', (event) => {
+  console.log('BCS Service Worker activating.');
+});
+
+self.addEventListener('fetch', (event) => {
+  console.log('BCS Service Worker fetching.', event.request.url);
+});
 
 export const backgroundCommunicationService =
   new BackgroundCommunicationService();
