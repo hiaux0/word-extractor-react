@@ -2,9 +2,10 @@ import { Browser } from "@/domain/types/types";
 
 console.log("[ ][C] 0. Extension content script is active.");
 
-if (!document.getElementById("app")) {
+if (!document.getElementById("word-extractor-app")) {
+  document.body.id = "word-extractor-app-body"
   const container = document.createElement("div");
-  container.id = "app";
+  container.id = "word-extractor-app";
   container.dataset.isContent = "true";
   container.style.position = "absolute";
   container.style.top = "0";

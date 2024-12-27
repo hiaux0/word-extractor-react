@@ -7,12 +7,12 @@ import { PersistanceWrapper } from "./ui/organisms/PersistanceWrapper";
 import { SidebarProvider } from "./components/ui/sidebar";
 import { ThemeProvider } from "./components/theme-provider";
 
-createRoot(document.getElementById("app")!).render(
+createRoot(document.getElementById("word-extractor-app")!).render(
   <Provider>
     <PersistanceWrapper>
       <ThemeProvider defaultTheme="light" storageKey="word-extractor-theme">
         <SidebarProvider>
-          <App root={document.getElementById("app")} />
+          <App root={document.getElementById("word-extractor-app")} />
         </SidebarProvider>
       </ThemeProvider>
     </PersistanceWrapper>
