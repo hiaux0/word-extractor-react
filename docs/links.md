@@ -12,6 +12,7 @@
   - https://akoskm.com/how-to-build-cross-browser-extensions-react-typescript-tailwindcss-vite/
     - https://github.com/akoskm/vite-react-tailwindcss-browser-extension-simple
 
+
 ## Popups
 - https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/user_interface/Popups
 - https://extensionworkshop.com/documentation/develop/debugging/#debugging_popups
@@ -22,6 +23,11 @@
 
 ## Cross Browser
 - https://github.com/mozilla/webextension-polyfill
+
+
+# Chrome
+- loading
+  https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked
 
 # Assorted
 - Share objects with page scripts
