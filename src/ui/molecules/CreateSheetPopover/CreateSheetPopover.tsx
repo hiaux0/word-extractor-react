@@ -32,7 +32,7 @@ export const CreateSheetPopover: FC<CreateSheetPopoverProps> = (props) => {
     const created = sheetsCRUDService.create({ name });
     if (!created) return;
     const updated = sheetsCRUDService.readAll();
-    /*prettier-ignore*/ console.log("1. [CreateSheetPopover.tsx,22] updated: ", updated);
+    /*prettier-ignore*/ console.log("[CreateSheetPopover.tsx,22] updated: ", updated);
     setSelectedSheet(created);
     setSheets(updated);
     setValue("");
