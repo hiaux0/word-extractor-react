@@ -1,7 +1,25 @@
+// const browser = require("../../extension/webextension-polyfill/dist/browser-polyfill.min.js");
+// const browser = require("browser-polyfill.min.js");
+import "@/lib/modules/polyfill"
 import { Browser, IConnection, IMessagePayload } from "@/domain/types/types";
 import { MESSAGES } from "./common/constants";
+// import * as browser from "../../extension/webextension-polyfill/dist/browser-polyfill.min.js";
+// @ts-ignore
 
-export declare var browser: Browser & typeof globalThis;
+// var browser = require("../../extension/webextension-polyfill/dist/browser-polyfill.min");
+// /*prettier-ignore*/ console.log("[CommunicationService.ts,8] browser: ", browser);
+
+// export declare var browser: Browser & typeof globalThis;
+// declare var chrome: Browser & typeof globalThis;
+const chrome: Browser & typeof globalThis = browser;
+
+// Add polyfill for Chrome compatibility
+//if (
+//  typeof browser === "undefined" ||
+//  Object.getPrototypeOf(browser) !== Object.prototype
+//) {
+//  var browser = require("webextension-polyfill");
+//}
 
 export interface ICommunicationService {
   initListeners: () => void;
@@ -13,9 +31,12 @@ class ContentScriptCommunicationService implements ICommunicationService {
 
   constructor(key?: string) {
     try {
-      let myPort = browser.runtime.connect({ name: "port-from-cs" });
+      const myPort = chrome.runtime.connect({ name: "port-from-cs" });
+      /*prettier-ignore*/ console.log("0. [CommunicationService.ts,17] myPort: ", myPort);
       this.port = myPort;
-    } catch {}
+    } catch (error) {
+      /*prettier-ignore*/ console.error("[CommunicationService.ts,21] error: ", error);
+    }
   }
 
   public initListeners() {

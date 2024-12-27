@@ -33,7 +33,9 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
       contentScriptCommunicationService.on(
         MESSAGES["database:read"],
         ({ payload }) => {
+          /*prettier-ignore*/ console.log("2.1 -------------------------------------------------------------------");
           const database = payload;
+          /*prettier-ignore*/ console.log("2.1.1 [PersistanceWrapper.tsx,37] database: ", database);
           if (!database) return setLoaded(true);
           const loadedWords = database.words;
           setWords(loadedWords);
@@ -52,6 +54,7 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
       });
     } else {
       const database = { words, sheets, selectedSheet };
+      /*prettier-ignore*/ console.log("2.2 [PersistanceWrapper.tsx,57] database: ", database);
       contentScriptCommunicationService.send({
         payload: database,
         action: MESSAGES["database:sync"],
