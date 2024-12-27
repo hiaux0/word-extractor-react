@@ -1,7 +1,10 @@
+import "@/lib/modules/polyfill";
 import { Browser, IConnection, IMessagePayload } from "@/domain/types/types";
 import { MESSAGES } from "./common/constants";
 
 export declare var browser: Browser & typeof globalThis;
+// declare var chrome: Browser & typeof globalThis;
+// const chrome: Browser & typeof globalThis = browser;
 
 export interface ICommunicationService {
   initListeners: () => void;
@@ -13,9 +16,11 @@ class ContentScriptCommunicationService implements ICommunicationService {
 
   constructor(key?: string) {
     try {
-      let myPort = browser.runtime.connect({ name: "port-from-cs" });
+      const myPort = browser.runtime.connect({ name: "port-from-cs" });
       this.port = myPort;
-    } catch {}
+    } catch (error) {
+      /*prettier-ignore*/ console.error("[CommunicationService.ts,21] error: ", error);
+    }
   }
 
   public initListeners() {
