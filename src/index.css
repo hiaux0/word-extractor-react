@@ -75,11 +75,17 @@
       --sidebar-ring: 217.2 91.2% 59.8%;
     }
   }
+
   @layer base {
-    body#app-body * {
-      @apply border-border;
+    body#word-extractor-app-body {
+      * {
+        box-sizing: border-box;
+        border-width: 0;
+        border-style: solid;
+        @apply border-border;
+      }
     }
-    body#app-body {
+    body#word-extractor-app-body {
       @apply bg-background text-foreground;
       ol,
       ul,
@@ -87,7 +93,6 @@
         list-style: none;
       }
     }
-
     [data-radix-popper-content-wrapper=""] {
       z-index: 9876543 !important;
     }

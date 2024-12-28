@@ -9,6 +9,7 @@ import {
 } from "@/lib/StateAtom";
 import { contentScriptCommunicationService } from "@/lib/CommunicationService";
 import { MESSAGES } from "@/lib/common/constants";
+import { getAppContainer } from "@/lib/modules/htmlModules";
 
 contentScriptCommunicationService.initListeners();
 
@@ -23,8 +24,7 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
   const [selectedSheet, setSelectedSheet] = useAtom(selectedSheetAtom);
   const [loaded, setLoaded] = useState(false);
 
-  const isBrowserAction =
-    document.getElementById("app")?.dataset.isBrowserAction === "true";
+  const isBrowserAction = getAppContainer()?.dataset.isBrowserAction === "true";
   const isLocalhost = window.location.hostname === "localhost";
   const isBackground = isBrowserAction && !isLocalhost;
 
