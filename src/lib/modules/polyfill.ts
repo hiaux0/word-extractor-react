@@ -7,7 +7,7 @@
 "use strict";
 
 if (!(globalThis.chrome && globalThis.chrome.runtime && globalThis.chrome.runtime.id)) {
-  throw new Error("This script should only be loaded in a browser extension.");
+  console.error("This script should only be loaded in a browser extension.");
 }
 
 if (!(globalThis.browser && globalThis.browser.runtime && globalThis.browser.runtime.id)) {
@@ -1211,7 +1211,9 @@ if (!(globalThis.browser && globalThis.browser.runtime && globalThis.browser.run
   // The build process adds a UMD wrapper around this file, which makes the
   // `module` variable available.
   // module.exports = wrapAPIs(chrome);
-  globalThis.browser = wrapAPIs(chrome);
+  if ((globalThis.chrome && globalThis.chrome.runtime && globalThis.chrome.runtime.id)) {
+    globalThis.browser = wrapAPIs(chrome);
+  }
 } else {
   // module.exports = globalThis.browser;
 }

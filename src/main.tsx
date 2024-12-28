@@ -6,13 +6,14 @@ import { Provider } from "jotai";
 import { PersistanceWrapper } from "./ui/organisms/PersistanceWrapper";
 import { SidebarProvider } from "./components/ui/sidebar";
 import { ThemeProvider } from "./components/theme-provider";
+import { getAppContainer } from "./lib/modules/htmlModules";
 
-createRoot(document.getElementById("word-extractor-app")!).render(
+createRoot(getAppContainer()!).render(
   <Provider>
     <PersistanceWrapper>
       <ThemeProvider defaultTheme="light" storageKey="word-extractor-theme">
         <SidebarProvider>
-          <App root={document.getElementById("word-extractor-app")} />
+          <App root={getAppContainer()} />
         </SidebarProvider>
       </ThemeProvider>
     </PersistanceWrapper>

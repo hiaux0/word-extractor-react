@@ -1,9 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @layer myapp;
 @layer myapp {
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+
   @layer base {
     :root {
       --background: 0 0% 100%;
@@ -92,6 +92,9 @@
       li {
         list-style: none;
       }
+    }
+    [data-radix-popper-content-wrapper=""] {
+      z-index: 9876543 !important;
     }
   }
 }

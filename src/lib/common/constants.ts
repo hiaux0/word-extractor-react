@@ -8,3 +8,8 @@ export const CONSTANTS = {
   localStorageKey: "wordExtractor",
   tableContainerId: "wordExtractorContainer",
 };
+
+export const SELECTORS = {
+  body: "word-extractor-app-body",
+  appContainer: "word-extractor-app",
+};
