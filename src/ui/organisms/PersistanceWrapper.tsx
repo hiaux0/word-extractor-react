@@ -24,7 +24,7 @@ export const PersistanceWrapper: FC<PersistanceProps> = (props) => {
   const [loaded, setLoaded] = useState(false);
 
   const isBrowserAction =
-    document.getElementById("word-extractor-app")?.dataset.isBrowserAction === "true";
+    document.getElementById("app")?.dataset.isBrowserAction === "true";
   const isLocalhost = window.location.hostname === "localhost";
   const isBackground = isBrowserAction && !isLocalhost;
 

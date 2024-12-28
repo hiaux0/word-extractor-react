@@ -1,9 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @layer myapp;
 @layer myapp {
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+
   @layer base {
     :root {
       --background: 0 0% 100%;
@@ -75,17 +75,11 @@
       --sidebar-ring: 217.2 91.2% 59.8%;
     }
   }
-
   @layer base {
-    body#word-extractor-app-body {
-      * {
-        box-sizing: border-box;
-        border-width: 0;
-        border-style: solid;
-        @apply border-border;
-      }
+    body#app-body * {
+      @apply border-border;
     }
-    body#word-extractor-app-body {
+    body#app-body {
       @apply bg-background text-foreground;
       ol,
       ul,
