@@ -11,6 +11,7 @@ node_modules
 dist
 extension/background/*
 extension/content/*
+extension/README.md
 dist-ssr
 *.local
 
