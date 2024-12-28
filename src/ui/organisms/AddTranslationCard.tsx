@@ -82,7 +82,7 @@ export function AddTranslationCard(props: AddTranslationCardProps) {
 
   return (
     <DragWrapper style={{ position: "relative" }}>
-      <Card className="w-[350px]">
+      <Card className="w-[350px] shadow">
         <CardContent className="p-4">
           <form>
             <div className="grid w-full items-center gap-4">
