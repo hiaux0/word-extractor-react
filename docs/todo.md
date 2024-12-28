@@ -4,8 +4,12 @@
     - both times Im sending a sync
         --> fix: handled loaded logic better
 - [ ] Highlight existing text nodes
+- [ ] sidebar does not collapse
 # Done
 
+- [x] Add button is white
+    dw.com
+    --> scope css vars to #word-extractor-app
 - [x] bug: selected text not getting highlighted
 - [x] change export json logic
 - [x] theme
