@@ -141,6 +141,7 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
 
   return (
     <div
+      className="ContentScriptPage"
       style={{
         position: "absolute",
         top: rectCoords.y,
@@ -148,6 +149,7 @@ export const ContentScriptPage: FC<ContentScriptPageProps> = ({ style }) => {
         display: hidden ? "none" : "block",
         backgroundColor: "transparent",
         ...style,
+        zIndex: 987_654,
       }}
     >
       {debug && (
