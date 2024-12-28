@@ -87,5 +87,9 @@
         list-style: none;
       }
     }
+
+    [data-radix-popper-content-wrapper=""] {
+      z-index: 9876543 !important;
+    }
   }
 }
