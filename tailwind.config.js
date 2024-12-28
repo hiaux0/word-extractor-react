@@ -1,8 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  important: '#word-extractor-app',
+  // important: '#word-extractor-app',
+  // important: true,
   darkMode: ["class"],
-  content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
+  content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}", "./@/**/*.{ts,tsx}"],
   theme: {
     extend: {
       borderRadius: {
@@ -65,4 +66,7 @@ export default {
     },
   },
   plugins: [require("tailwindcss-animate")],
+  corePlugins: {
+    preflight: true,
+  }
 };
