@@ -1,5 +1,5 @@
 export const DEBUG_FLAGS = {
-  debugUI: true,
+  debugUI: false,
   showDemo: false,
   addMockData: false,
 };
