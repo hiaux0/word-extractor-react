@@ -23,6 +23,7 @@ import {
 import { getTextFromSelection } from "@/lib/modules/htmlModules";
 import { ModeToggle } from "@/components/mode-toggle";
 import { DragWrapper } from "../atoms/DragButton/DragWrapper";
+import { X } from "lucide-react";
 
 interface AddTranslationCardProps extends ComponentProps<any> {
   text?: string;
@@ -102,6 +103,15 @@ export function AddTranslationCard(props: AddTranslationCardProps) {
                   />
                 </div>
                 <ModeToggle />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onAdd?.()}
+                  className="h-8 w-8 p-0"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="text">Text</Label>
@@ -129,7 +139,7 @@ export function AddTranslationCard(props: AddTranslationCardProps) {
           </form>
         </CardContent>
         <CardFooter className="flex justify-between pb-4">
-          <Button size="sm" onClick={() => createTranslation()}>
+          <Button size="sm" type="button" onClick={() => createTranslation()}>
             Add
           </Button>
         </CardFooter>
