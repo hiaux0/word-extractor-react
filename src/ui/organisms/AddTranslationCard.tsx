@@ -102,7 +102,6 @@ export function AddTranslationCard(props: AddTranslationCardProps) {
                     }}
                   />
                 </div>
-                <ModeToggle />
                 <Button
                   type="button"
                   variant="ghost"
