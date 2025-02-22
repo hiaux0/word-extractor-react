@@ -81,7 +81,7 @@ export const Combobox: FC<ComboboxProps> = (props) => {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between "
+          className="w-[200px] justify-between border border-solid"
         >
           {value ? (
             items.find((item) => item.value === value)?.label

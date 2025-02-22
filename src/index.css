@@ -79,7 +79,7 @@
       font-family: Arial,sans-serif;
       * {
         box-sizing: border-box;
-        border-width: 0;
+        /* border-width: 0; */
         border-style: solid;
         @apply border-border;
       }
