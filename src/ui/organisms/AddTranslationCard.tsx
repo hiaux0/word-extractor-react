@@ -84,7 +84,7 @@ export function AddTranslationCard(props: AddTranslationCardProps) {
   return (
     <DragWrapper style={{ position: "relative" }}>
       <Card className="w-[350px] shadow">
-        <CardContent className="p-4">
+        <CardContent className="!p-4">
           <form>
             <div className="grid w-full items-center gap-4">
               <div className="flex justify-between">
@@ -137,7 +137,7 @@ export function AddTranslationCard(props: AddTranslationCardProps) {
             </div>
           </form>
         </CardContent>
-        <CardFooter className="flex justify-between pb-4">
+        <CardFooter className="!flex !justify-between !pb-4">
           <Button size="sm" type="button" onClick={() => createTranslation()}>
             Add
           </Button>
