@@ -1,7 +1,7 @@
 {
   "name": "word-extractor-react",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "run": "web-ext run",
-    "zip": "zip -r word-extractor-v0.1.0.zip ./extension/"
+    "zip": "zip -r word-extractor-v0.2.1.zip ./extension/"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.1.3",
