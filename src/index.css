@@ -93,7 +93,7 @@
 
   @media (min-width: 768px) {
     .md\:block,
-    .hidden {
+    #word-extractor-app .hidden {
       display: block !important;
     }
   }
