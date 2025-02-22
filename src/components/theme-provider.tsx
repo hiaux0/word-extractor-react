@@ -31,7 +31,7 @@ export function ThemeProvider({
   );
 
   useEffect(() => {
-    const root = window.document.documentElement;
+    const root = document.querySelector("#word-extractor-app") as HTMLElement;
 
     root.classList.remove("light", "dark");
 
