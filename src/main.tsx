@@ -11,7 +11,7 @@ import { getAppContainer } from "./lib/modules/htmlModules";
 createRoot(getAppContainer()!).render(
   <Provider>
     <PersistanceWrapper>
-      <ThemeProvider defaultTheme="light" storageKey="word-extractor-theme">
+      <ThemeProvider defaultTheme="system" storageKey="word-extractor-theme">
         <SidebarProvider>
           <App root={getAppContainer()} />
         </SidebarProvider>
